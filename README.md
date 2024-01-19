@@ -12,7 +12,7 @@
  communities. The Panzer Wireless Gauge widget is an attractive dieselpunk VB6 widget for your desktop. 
  Functional and gorgeous at the same time. The graphics are my own, I took original inspiration from a clock face by Italo Fortana combining it with an aircraft gauge. It is all my code with some help from the chaps at VBForums (credits given). 
   
-The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless strength of all wi-fi network devices available to your system but it does so in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require. Requires installation of Open Hardware Monitor to allow the temperatures to be extracted and written to the WMI data repository. 
+The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless strength of all wi-fi network devices available to your system but it does so in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require. 
 
  ![vb6PanzerWirelessPhoto1440x](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/7e182a87-baf5-4244-bcb9-769487bdfb62)
 
