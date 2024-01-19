@@ -20,7 +20,7 @@ The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless streng
  opacity/transparency may be set as to the users discretion. The widget can 
  also be made to hide for a pre-determined period.
  
-![panzerOHMgauge](https://github.com/yereverluvinunclebert/Panzer-OHM-Gauge-VB6/assets/2788342/a2172003-befd-4ec3-a9f2-9f0ef69416d7)
+![Default](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/bd00835a-b72e-4d8c-929b-faa9291d749a)
 
  Right clicking will bring up a menu of options. Double-clicking on the widget will cause a personalised Windows application to 
  fire up. The first time you run it there will be no assigned function and so it 
@@ -29,8 +29,8 @@ The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless streng
  windows. Mouse hover over the widget and press CTRL+mousewheel up/down to resize. It works well on Windows XP 
  to Windows 11.
  
-![panzer-temperature-Wireless-help](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/55c5a56f-2ba6-4dad-8649-d8a9314cc9d5)
- 
+![panzergauge-help](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/126d13a4-f726-40e7-b388-f9c2d3353f49)
+
  The Panzer CPU Gauge VB6 gauge is Beta-grade software, under development, not yet 
  ready to use on a production system - use at your own risk.
 
@@ -55,7 +55,7 @@ The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless streng
  enhancements and contributions will be gratefully received if you choose to 
  contribute.
 
-![security](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/3fc22b45-ca08-4c2b-98f1-8cce6e4003c6)
+![security](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/fc73654d-5eab-4c06-9384-34c0a823399c)
 
  BUILD: The program runs without any Microsoft plugins.
  
@@ -207,7 +207,7 @@ The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless streng
  With regard to the commercial use of incorporated images, permission and a 
  licence would need to be obtained from the original owner and creator, ie. me.
  
-![about](https://github.com/yereverluvinunclebert/Panzer-OHM-Gauge-VB6/assets/2788342/e48a2165-efa1-44ae-a75a-46801ea461ab)
+![about](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/5f2c76ca-9941-4390-8140-c0759d6f49e5)
 
 ![Panzer-CPU-Gauge-onDesktop](https://github.com/yereverluvinunclebert/Panzer-CPU-Gauge-VB6/assets/2788342/f2e06e77-77ee-46fb-840d-e14f96b4e0a5)
 
