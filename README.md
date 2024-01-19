@@ -2,7 +2,7 @@
  
   A FOSS Wireless Gauge VB6 WoW64 Widget for Reactos, XP, Win7, 8 and 10/11+.
  
- My current VB6/RC6 PSD program being worked upon now, about 85% complete, awaiting alternative scale face switching, smooth rotation to the temperature pointer, testing on Windows XP and Win7 32bit and some multi-monitor checking, completion of the CHM help file and the creation of the setup.exe. This Panzer widget is based upon the Yahoo/Konfabulator widget of the same visual design and very similar operation.
+ My current VB6/RC6 PSD program being worked upon now, about 70% complete, awaiting alternative scale face switching, smooth rotation to the temperature pointer, testing on Windows XP and Win7 32bit and some multi-monitor checking, completion of the CHM help file and the creation of the setup.exe. This Panzer widget is based upon the Yahoo/Konfabulator widget of the same visual design and very similar operation.
 
  Why VB6? Well, with a 64 bit, modern-language improvement upgrade on the way with 100% compatible TwinBasic coupled with support for transparent PNGs via RC/Cairo, VB6 code has an amazing future.
 
@@ -12,7 +12,7 @@
  communities. The Panzer Wireless Gauge widget is an attractive dieselpunk VB6 widget for your desktop. 
  Functional and gorgeous at the same time. The graphics are my own, I took original inspiration from a clock face by Italo Fortana combining it with an aircraft gauge. It is all my code with some help from the chaps at VBForums (credits given). 
   
-The Panzer Wireless Gauge VB6 is a useful utility displaying the temperatures of all cores and components in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require. Requires installation of Open Hardware Monitor to allow the temperatures to be extracted and written to the WMI data repository. 
+The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless strength of all wi-fi network devices available to your system but it does so in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require. Requires installation of Open Hardware Monitor to allow the temperatures to be extracted and written to the WMI data repository. 
 
  ![vb6PanzerWirelessPhoto1440x](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/7e182a87-baf5-4244-bcb9-769487bdfb62)
 
