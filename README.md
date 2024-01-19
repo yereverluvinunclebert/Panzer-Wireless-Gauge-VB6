@@ -1,6 +1,6 @@
-# Panzer-OHM-Gauge-VB6
+# Panzer-Wireless-Gauge-VB6
  
-  A FOSS OHM Gauge VB6 WoW64 Widget for Reactos, XP, Win7, 8 and 10/11+.
+  A FOSS Wireless Gauge VB6 WoW64 Widget for Reactos, XP, Win7, 8 and 10/11+.
  
  My current VB6/RC6 PSD program being worked upon now, about 85% complete, awaiting alternative scale face switching, smooth rotation to the temperature pointer, testing on Windows XP and Win7 32bit and some multi-monitor checking, completion of the CHM help file and the creation of the setup.exe. This Panzer widget is based upon the Yahoo/Konfabulator widget of the same visual design and very similar operation.
 
@@ -9,12 +9,12 @@
 ![vb6-logo-350](https://github.com/yereverluvinunclebert/Panzer-CPU-Gauge-VB6/assets/2788342/39e2c93f-40a5-4c47-8c23-d8ce7c747b10)
 
  I created as a variation of the previous gauges I had previously created for the World of Tanks and War Thunder 
- communities. The Panzer OHM Gauge widget is an attractive dieselpunk VB6 widget for your desktop. 
+ communities. The Panzer Wireless Gauge widget is an attractive dieselpunk VB6 widget for your desktop. 
  Functional and gorgeous at the same time. The graphics are my own, I took original inspiration from a clock face by Italo Fortana combining it with an aircraft gauge. It is all my code with some help from the chaps at VBForums (credits given). 
   
-The Panzer OHM Gauge VB6 is a useful utility displaying the temperatures of all cores and components in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require. Requires installation of Open Hardware Monitor to allow the temperatures to be extracted and written to the WMI data repository. The Panzer OHM Gauge VB6 extracts the temperature data from that repository and displays it as a Panzer gauge on the desktop. In time there will also be coreTemp and Speedfan versions of the same VB6 widget - watch this space!
- 
-![panzer-OHMphoto-1440x900](https://github.com/yereverluvinunclebert/Panzer-OHM-Gauge-VB6/assets/2788342/f44dea4e-ed05-44a4-8516-3c06eaa01068)
+The Panzer Wireless Gauge VB6 is a useful utility displaying the temperatures of all cores and components in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require. Requires installation of Open Hardware Monitor to allow the temperatures to be extracted and written to the WMI data repository. 
+
+ ![vb6PanzerWirelessPhoto1440x](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/7e182a87-baf5-4244-bcb9-769487bdfb62)
 
  This widget can be increased in size, animation speed can be changed, 
  opacity/transparency may be set as to the users discretion. The widget can 
@@ -29,7 +29,7 @@ The Panzer OHM Gauge VB6 is a useful utility displaying the temperatures of all 
  windows. Mouse hover over the widget and press CTRL+mousewheel up/down to resize. It works well on Windows XP 
  to Windows 11.
  
-![panzer-temperature-OHM-help](https://github.com/yereverluvinunclebert/Panzer-OHM-Gauge-VB6/assets/2788342/55c5a56f-2ba6-4dad-8649-d8a9314cc9d5)
+![panzer-temperature-Wireless-help](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/55c5a56f-2ba6-4dad-8649-d8a9314cc9d5)
  
  The Panzer CPU Gauge VB6 gauge is Beta-grade software, under development, not yet 
  ready to use on a production system - use at your own risk.
@@ -55,7 +55,7 @@ The Panzer OHM Gauge VB6 is a useful utility displaying the temperatures of all 
  enhancements and contributions will be gratefully received if you choose to 
  contribute.
 
-![security](https://github.com/yereverluvinunclebert/Panzer-OHM-Gauge-VB6/assets/2788342/3fc22b45-ca08-4c2b-98f1-8cce6e4003c6)
+![security](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/3fc22b45-ca08-4c2b-98f1-8cce6e4003c6)
 
  BUILD: The program runs without any Microsoft plugins.
  
