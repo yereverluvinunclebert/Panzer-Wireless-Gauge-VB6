@@ -379,7 +379,7 @@ Public Property Let thisWirelessNo(ByVal newValue As Integer)
             
     'given a Wireless number select the Wireless string
     If mThisWirelessNo < gblWirelessCount Then
-        mThisWireless = gblWirelessSSIDArray(mThisWirelessNo, 1)
+        mThisWireless = gblWirelessSSIDArray(mThisWirelessNo)
     End If
     
     Call obtainwirelesss
