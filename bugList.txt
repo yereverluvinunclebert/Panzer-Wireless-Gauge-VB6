@@ -28,9 +28,13 @@ DONE
 ' conversion from C to F
 ' switch face from C to F
 
+' balloon tooltips
+
 ' -oOo-
 
 TODO
+
+' more information signal noise &c
 
 ' html help and images update
 ' chm help built
