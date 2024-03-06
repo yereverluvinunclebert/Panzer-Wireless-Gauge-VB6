@@ -3251,7 +3251,7 @@ Private Sub btnSave_Click()
 '    PzGMainGaugeTimeZone = cmbMainGaugeTimeZone.ListIndex
 '    PzGMainDaylightSaving = cmbMainDaylightSaving.ListIndex
     
-    PzGSmoothSecondHand = cmbTickSwitchPref.ListIndex
+    PzGPointerAnimate = cmbTickSwitchPref.ListIndex
     PzGPercentWireless = cmbCurrentWireless.ListIndex
     PzGSamplingInterval = LTrim$(Str$(sliSamplingInterval.Value))
     
@@ -3329,7 +3329,7 @@ Private Sub btnSave_Click()
         sPutINISetting "Software\PzWirelessGauge", "scrollWheelDirection", PzGScrollWheelDirection, PzGSettingsFile
                 
         sPutINISetting "Software\PzWirelessGauge", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
-        sPutINISetting "Software\PzWirelessGauge", "smoothSecondHand", PzGSmoothSecondHand, PzGSettingsFile
+        sPutINISetting "Software\PzWirelessGauge", "pointerAnimate", PzGPointerAnimate, PzGSettingsFile
         sPutINISetting "Software\PzWirelessGauge", "samplingInterval", PzGSamplingInterval, PzGSettingsFile
         
         sPutINISetting "Software\PzGPercentWireless", "percentWireless", PzGPercentWireless, PzGSettingsFile
@@ -3576,7 +3576,7 @@ Private Sub adjustPrefsControls()
         
     ' txtBias.Text = tzDelta
 
-    cmbTickSwitchPref.ListIndex = Val(PzGSmoothSecondHand)
+    cmbTickSwitchPref.ListIndex = Val(PzGPointerAnimate)
     
     ' prefs combo matches stored current Wireless
     cmbCurrentWireless.ListIndex = Val(PzGPercentWireless)

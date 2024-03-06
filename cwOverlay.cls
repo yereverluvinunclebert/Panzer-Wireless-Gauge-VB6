@@ -31,13 +31,23 @@ Public cyPerc As Single
 
 Private WithEvents W As cWidgetBase
 Attribute W.VB_VarHelpID = -1
-Private WithEvents tmrClock As cTimer
-Attribute tmrClock.VB_VarHelpID = -1
+Private WithEvents tmrSampler As cTimer
+Attribute tmrSampler.VB_VarHelpID = -1
+Private WithEvents tmrAnimator As cTimer
+Attribute tmrAnimator.VB_VarHelpID = -1
+
+Private oldSDeg As Double
+Private newSDeg As Double
+Private animationQuanta As Double
+Private animationAmount As Double
+Private animationDivisions As Integer
+Private animationInterval As Integer
+Private animateCCW As Boolean
 
 Private SDeg As Double
 
 Private mTicking As Boolean             ' property Ticking
-Private mSmoothSecondHand As Boolean    ' property SmoothSecondHand
+Private mPointerAnimate As Boolean    ' property PointerAnimate
 Private mLocked As Boolean              ' property Locked
 Private mHidden As Boolean              ' property Hidden
 Private mThisWireless As String            ' property thisWireless
@@ -57,7 +67,6 @@ Private mThisFace As Integer             ' property mThisFace
 '---------------------------------------------------------------------------------------
 '
 Private Sub Class_Initialize()
-    Dim intervalValue As Integer: intervalValue = 0
     
     On Error GoTo Class_Initialize_Error
 
@@ -65,10 +74,14 @@ Private Sub Class_Initialize()
         W.BackColor = -1  'we don't use any BackColor here, transparent
         W.ImplementsHitTest = True 'when at False, no HitTest-Event would be triggered
                     
-    intervalValue = 5000
-
-    Set tmrClock = Nothing
-    Set tmrClock = New_c.Timer(100, mTicking)
+    Set tmrSampler = Nothing
+    Set tmrSampler = New_c.Timer(100, mTicking) ' first interval is 1/10th of a second, don't change it, triggers an immediate run. Correct sampling interval read later
+    
+    animationDivisions = 12
+    animationInterval = 40
+    
+    Set tmrAnimator = Nothing
+    Set tmrAnimator = New_c.Timer(animationInterval, False)
     
     mThisWireless = 0
     
@@ -156,15 +169,15 @@ Public Property Let Ticking(ByVal newValue As Boolean)
     If mTicking <> newValue Then mTicking = newValue Else Exit Property
     
     If mTicking Then
-'        If mSmoothSecondHand Then
+'        If mPointerAnimate Then
 '            'intervalValue = 100
 '        Else
 '            'intervalValue = 500
 '        End If
 
-        tmrClock.Enabled = True
+        tmrSampler.Enabled = True
     Else
-        tmrClock.Enabled = False
+        tmrSampler.Enabled = False
     End If
 
    On Error GoTo 0
@@ -176,51 +189,43 @@ TickingLet_Error:
 End Property ' the earth Ticking flag
 
 '---------------------------------------------------------------------------------------
-' Property : SmoothSecondHand
+' Property : PointerAnimate
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Get SmoothSecondHand() As Boolean
-   On Error GoTo SmoothSecondHandGet_Error
+Public Property Get PointerAnimate() As Boolean
+   On Error GoTo PointerAnimateGet_Error
 
-    SmoothSecondHand = mSmoothSecondHand
+    PointerAnimate = mPointerAnimate
 
    On Error GoTo 0
    Exit Property
 
-SmoothSecondHandGet_Error:
+PointerAnimateGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property SmoothSecondHand of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property PointerAnimate of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property  : SmoothSecondHand
+' Property  : PointerAnimate
 ' Author    :
 ' Date      : 09/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Let SmoothSecondHand(ByVal newValue As Boolean)
+Public Property Let PointerAnimate(ByVal newValue As Boolean)
     Dim intervalValue As Integer: intervalValue = 0
-    On Error GoTo SmoothSecondHandLet_Error
+    On Error GoTo PointerAnimateLet_Error
 
-    If mSmoothSecondHand <> newValue Then mSmoothSecondHand = newValue Else Exit Property
-    
-    If mSmoothSecondHand Then
-        intervalValue = 100
-    Else
-        intervalValue = 500
-    End If
-            
-    tmrClock.Interval = intervalValue
+    If mPointerAnimate <> newValue Then mPointerAnimate = newValue Else Exit Property
     
    On Error GoTo 0
    Exit Property
 
-SmoothSecondHandLet_Error:
+PointerAnimateLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property SmoothSecondHand of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property PointerAnimate of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
 ' Property : thisOpacity
@@ -421,8 +426,13 @@ Public Property Let samplingInterval(ByVal newValue As String)
     On Error GoTo samplingIntervalLet_Error
 
     If mSamplingInterval <> newValue Then mSamplingInterval = newValue Else Exit Property
+
+    If tmrSampler.Interval = 100 Then Call tmrSampler_Timer ' allows first early run
     
-    Call obtainwirelesss
+    tmrSampler.Interval = Val(mSamplingInterval) * 1000
+    If mPointerAnimate = True Then
+        If tmrSampler.Interval = 1000 Then tmrSampler.Interval = 1200 ' take into account the animator
+    End If
     
     On Error GoTo 0
     Exit Property
@@ -664,38 +674,125 @@ W_Paint_Error:
 End Sub
  
  
-
-    
 '---------------------------------------------------------------------------------------
-' Procedure : tmrClock_Timer
+' Procedure : tmrAnimator_Timer
+' Author    :
+' Date      : 30/07/2023
+' Purpose   : animate timer, once every few (40) milliseconds
+'---------------------------------------------------------------------------------------
+'
+Private Sub tmrAnimator_Timer()
+    
+    On Error GoTo tmrAnimator_Timer_Error
+    '
+    ' move the pointer using SDeg
+    '
+    animationAmount = animationAmount + animationQuanta
+
+    If animateCCW = True Then
+        If SDeg > newSDeg Then
+            SDeg = oldSDeg - animationAmount
+        Else
+            tmrAnimator.Enabled = False ' when the animation is complete then stop the animator
+            animationAmount = 0
+            Exit Sub
+        End If
+    Else
+        If SDeg < newSDeg Then
+            SDeg = oldSDeg + animationAmount
+        Else
+            tmrAnimator.Enabled = False
+            animationAmount = 0
+            Exit Sub
+        End If
+    End If
+
+    W.Parent.Refresh
+
+   On Error GoTo 0
+   Exit Sub
+
+tmrAnimator_Timer_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrAnimator_Timer of Class Module cwOverlay"
+End Sub
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : tmrSampler_Timer
 ' Author    :
 ' Date      : 30/07/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub tmrClock_Timer()
+Private Sub tmrSampler_Timer()
+    Dim degDiff As Double: degDiff = 0
     
-    On Error GoTo tmrClock_Timer_Error
-    
-    tmrClock.Interval = Val(PzGSamplingInterval) * 1000
+    On Error GoTo tmrSampler_Timer_Error
 
-'    If mSmoothSecondHand = True Then
-
-'    Else
-
-        Call obtainwirelesss
+    If mPointerAnimate = True Then
+        If tmrAnimator.Enabled = False Then
         
-'    End If
+            ' oldSDeg stored
+            oldSDeg = SDeg
+            
+            ' get the list of Wireless and the count
+            Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
+        
+            If mThisWirelessNo <> "9999" Then
+                wirelessPercent = Wireless_Usage_Percent
+            Else
+                wirelessPercent = 0
+            End If
+                       
+            ' calculate the new signal strength amount in degrees
+            newSDeg = (wirelessPercent * 3) + 30
+            
+            If oldSDeg = newSDeg Then Exit Sub
+            
+            ' calculate the difference
+            degDiff = newSDeg - oldSDeg
+            
+            ' if the result is negative animate CCW
+            If degDiff < 0 Then
+                animateCCW = True
+            Else
+                animateCCW = False
+            End If
+            
+            Select Case degDiff
+                Case Is <= 5
+                    animationDivisions = 4
+                Case Is <= 10
+                    animationDivisions = 8
+                Case Is > 10
+                    animationDivisions = 16
+                Case Is > 20
+                    animationDivisions = 24
+            End Select
+            
+            ' divide that by 24 (one second duration)
+            animationQuanta = Abs(degDiff / animationDivisions)
+            
+            tmrAnimator.Enabled = True
+            
+        End If
+    Else
+        Call obtainwirelesss
+    End If
     
     W.Parent.Refresh
 
    On Error GoTo 0
    Exit Sub
 
-tmrClock_Timer_Error:
+tmrSampler_Timer_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrClock_Timer of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrSampler_Timer of Class Module cwOverlay"
 End Sub
+
+
+
 
 ' ----------------------------------------------------------------
 ' Procedure Name: obtainwirelesss
