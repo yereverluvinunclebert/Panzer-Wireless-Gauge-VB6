@@ -3753,14 +3753,16 @@ Private Sub populatePrefsComboBoxes()
     cmbTickSwitchPref.AddItem "Smooth", 1
     cmbTickSwitchPref.ItemData(1) = 1
     
-    For I = 0 To (gblWirelessCount - 1)
-        If gblWirelessSSIDArray(I) = "" Then Exit For
-        cmbCurrentWireless.AddItem "Wireless " & (I + 1) & " " & gblWirelessSSIDArray(I) & " " & gblWirelessSSIDArray(I), I
-        cmbCurrentWireless.ItemData(I) = I
-    Next I
-'    cmbCurrentWireless.AddItem "none", I
-'    cmbCurrentWireless.ItemData(I) = 9999
-    
+    If gblWirelessCount = 0 Then
+        cmbCurrentWireless.AddItem "none", I
+        cmbCurrentWireless.ItemData(I) = 9999
+    Else
+        For I = 0 To (gblWirelessCount - 1)
+            If gblWirelessSSIDArray(I) = "" Then Exit For
+            cmbCurrentWireless.AddItem "Wireless " & (I + 1) & " " & gblWirelessSSIDArray(I) & " " & gblWirelessSSIDArray(I), I
+            cmbCurrentWireless.ItemData(I) = I
+        Next I
+    End If
 
     On Error GoTo 0
     Exit Sub

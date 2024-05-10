@@ -2288,6 +2288,8 @@ Public Sub makeProgramPreferencesAvailable()
         
         Call readPrefsPosition
         Call panzerPrefs.positionPrefsMonitor
+    Else
+        panzerPrefs.SetFocus
     End If
     
 
@@ -2799,8 +2801,8 @@ Public Sub getgblWirelessArray(ByRef thisArray() As String, ByRef thisWirelessPe
     
     Call ScanWireless(thisArray, thisWirelessPercentArray, thisWirelessCount)
     
-    Debug.Print (thisArray(0))
-    Debug.Print (thisWirelessPercentArray(0))
+'    Debug.Print (thisArray(0))
+'    Debug.Print (thisWirelessPercentArray(0))
     
         
     On Error GoTo 0

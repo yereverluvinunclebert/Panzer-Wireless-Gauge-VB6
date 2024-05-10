@@ -24,6 +24,9 @@ Option Explicit
 
 Private wirelessPercent As Long
 
+Private Declare Function SafeArrayGetDim Lib "oleaut32.dll" (ByRef saArray() As Any) As Long
+
+
 'these Public Properties are set in the Parent (here, cfAlpha)
 Public cCollOverlayImages As cCollection
 Public cxPerc As Single
@@ -740,7 +743,7 @@ Private Sub tmrSampler_Timer()
             Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
         
             If mThisWirelessNo <> "9999" Then
-                wirelessPercent = Wireless_Usage_Percent
+                wirelessPercent = fWireless_Usage_Percent
             Else
                 wirelessPercent = 0
             End If
@@ -811,7 +814,7 @@ Private Sub obtainwirelesss()
         Debug.Print gblWirelessSSIDArray(0)
     
         If mThisWirelessNo <> "9999" Then
-            wirelessPercent = Wireless_Usage_Percent
+            wirelessPercent = fWireless_Usage_Percent
         Else
             wirelessPercent = 0
         End If
@@ -830,7 +833,7 @@ obtainwirelesss_Error:
 End Sub
 
 ' ----------------------------------------------------------------
-' Procedure Name: Wireless_Usage_Current
+' Procedure Name: fWireless_Usage_Current
 ' Purpose:
 ' Procedure Kind: Function
 ' Procedure Access: Private
@@ -838,20 +841,24 @@ End Sub
 ' Author: https://www.tek-tips.com/userinfo.cfm?member=Hypetia
 ' Date: 09/01/2024
 ' ----------------------------------------------------------------
-Private Function Wireless_Usage_Percent() As Long
+Private Function fWireless_Usage_Percent() As Long
     Dim newT As Integer
-    On Error GoTo Wireless_Usage_Percent_Error
+    On Error GoTo fWireless_Usage_Percent_Error
     
-    newT = gblWirelessPercentArray(mThisWirelessNo)
+    If SafeArrayGetDim(gblWirelessPercentArray) <> 0 Then
+        newT = gblWirelessPercentArray(overlayWidget.thisWirelessNo)
+    Else
+        newT = 0
+    End If
 
-    Wireless_Usage_Percent = newT
+    fWireless_Usage_Percent = newT
      
     On Error GoTo 0
     Exit Function
 
-Wireless_Usage_Percent_Error:
+fWireless_Usage_Percent_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Wireless_Usage_Percent, line " & Erl & "."
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fWireless_Usage_Percent, line " & Erl & "."
 
  
 End Function

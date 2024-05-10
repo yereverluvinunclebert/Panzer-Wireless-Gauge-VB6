@@ -26,6 +26,8 @@ Attribute gaugeForm.VB_VarHelpID = -1
 
 Public collPSDNonUIElements As cCollection, FX As Long, FY As Long, FZ As Single  'available on the outside, even after the Form was closed
 
+Private Declare Function SafeArrayGetDim Lib "oleaut32.dll" (ByRef saArray() As Any) As Long
+
 Private PSDWidth As Long
 Private PSDHeight As Long
 Private mGlowing As Boolean
@@ -136,6 +138,9 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As String, ByRef P1 As Variant, ByRef P2 As Variant, ByRef P3 As Variant, ByRef P4 As Variant, ByRef P5 As Variant, ByRef P6 As Variant, ByRef P7 As Variant)
+   Dim netWorkName As String: netWorkName = vbNullString
+   Dim signalLevel As String: signalLevel = vbNullString
+   
    On Error GoTo gaugeForm_BubblingEvent_Error
 
     If PzGIgnoreMouse = "1" Then Exit Sub
@@ -164,8 +169,17 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button opens the one-page help file for this widget. There is a further detailed CHM help file available from the right-click menu that contains all the information that you need to run this widget.", _
                      TTIconInfo, widgetName & " Help Button Help", , , , True
             Case Else
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Network: . " & gblWirelessSSIDArray(overlayWidget.thisWirelessNo) _
-                    & vbCrLf & "Signal Level: " & gblWirelessPercentArray(overlayWidget.thisWirelessNo) & "%" _
+            
+            If SafeArrayGetDim(gblWirelessSSIDArray) <> 0 Then
+                netWorkName = gblWirelessSSIDArray(overlayWidget.thisWirelessNo)
+                signalLevel = gblWirelessPercentArray(overlayWidget.thisWirelessNo)
+            Else
+                netWorkName = "not connected"
+                signalLevel = "0"
+                'MsgBox "Array has not been Initialized"
+            End If
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Network: . " & netWorkName _
+                    & vbCrLf & "Signal Level: " & signalLevel & "%" _
                     & vbCrLf & "Noise Level: " & "db" _
                     & vbCrLf & "" _
                     & vbCrLf & "Right Click to open the menu and the preferences. CTRL+ Mouse scrollwheel UP/DOWN to resize." _

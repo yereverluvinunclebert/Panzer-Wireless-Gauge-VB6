@@ -145,9 +145,9 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     ' get the list of Wireless and the count
     Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
     
-    Debug.Print gblWirelessSSIDArray(0)
-    Debug.Print gblWirelessPercentArray(0)
-    Debug.Print gblWirelessCount
+'    Debug.Print gblWirelessSSIDArray(0)
+'    Debug.Print gblWirelessPercentArray(0)
+'    Debug.Print gblWirelessCount
     
     ' run the functions that are also called at reload time.
     Call adjustMainControls ' this needs to be here after the initialisation of the Cairo forms and widgets
