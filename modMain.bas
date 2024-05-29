@@ -145,7 +145,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call ScanWireless(gblWirelessCount)
     
     ' get the list of Wireless and the count
-    Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
+    Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
     
 '    Debug.Print gblWirelessSSIDArray(0)
 '    Debug.Print gblWirelessPercentArray(0)

@@ -230,7 +230,7 @@ Private lVersion As Long
 Private Connected As String
 Private bBuffer() As Byte
 
-Public Sub BasicServiceSet(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef lCount As Integer)
+Public Sub BasicServiceSet(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef lCount As Integer)
     Dim lBSS As Long
     Dim lRet As Long
     Dim sLen As Long
@@ -254,6 +254,7 @@ Public Sub BasicServiceSet(ByRef thisArray() As String, ByRef thisWirelessPercen
                 
         ReDim thisArray(udtBSSList.dwNumberofItems) As String
         ReDim thisWirelessPercentArray(udtBSSList.dwNumberofItems) As Integer
+        ReDim thisWirelessRSSIArray(udtBSSList.dwNumberofItems) As Integer
 
         Do
             CopyMemory udtBSS, ByVal lStart, Len(udtBSS)
@@ -275,6 +276,7 @@ Public Sub BasicServiceSet(ByRef thisArray() As String, ByRef thisWirelessPercen
             
             thisArray(lCount) = sSSID
             thisWirelessPercentArray(lCount) = udtBSS.uLinkQuality
+            thisWirelessRSSIArray(lCount) = udtBSS.lRssi
 
             lCount = lCount + 1
             lStart = lStart + Len(udtBSS)

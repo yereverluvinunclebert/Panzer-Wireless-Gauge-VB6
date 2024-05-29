@@ -436,6 +436,7 @@ Public msgBoxADynamicSizingFlg As Boolean
 
 Public gblWirelessSSIDArray() As String
 Public gblWirelessPercentArray() As Integer
+Public gblWirelessRSSIArray() As Integer
 Public gblWirelessCount As Integer
 
 
@@ -2788,14 +2789,14 @@ End Function
 ' Author: beededea
 ' Date: 13/01/2024
 ' ----------------------------------------------------------------
-Public Sub getgblWirelessArray(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessCount As Integer)
+Public Sub getgblWirelessArray(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef thisWirelessCount As Integer)
     
     'Dim thisWirelessCount As Integer: thisWirelessCount = 0
     Dim i As Integer
     
     On Error GoTo getGblWirelessArray_Error
     
-    Call BasicServiceSet(thisArray, thisWirelessPercentArray, thisWirelessCount)
+    Call BasicServiceSet(thisArray, thisWirelessPercentArray, thisWirelessRSSIArray, thisWirelessCount)
     
 '    Debug.Print (thisArray(0))
 '    Debug.Print (thisWirelessPercentArray(0))

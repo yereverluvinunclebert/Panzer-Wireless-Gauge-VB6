@@ -733,10 +733,8 @@ Private Sub tmrSampler_Timer()
             oldSDeg = SDeg
             
             ' get the list of Wireless and the count
-            Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
-            
-            'Call BasicServiceSet(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
-        
+            Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
+                    
             If mThisWirelessNo <> "9999" Then
                 wirelessPercent = fWireless_Usage_Percent
             Else
@@ -804,7 +802,7 @@ Private Sub obtainwirelesss()
     On Error GoTo obtainwirelesss_Error
     
         ' get the list of Wirelesss and the count
-        Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
+        Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
         
         Debug.Print gblWirelessSSIDArray(0)
     
@@ -815,9 +813,7 @@ Private Sub obtainwirelesss()
         End If
                 
         SDeg = (wirelessPercent * 3) + 30
-        
-        'Call BasicServiceSet(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
-        
+                
         W.Refresh
     
     On Error GoTo 0
