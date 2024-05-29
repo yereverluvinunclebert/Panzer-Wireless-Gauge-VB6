@@ -166,18 +166,11 @@ End Property
 '---------------------------------------------------------------------------------------
 '
 Public Property Let Ticking(ByVal newValue As Boolean)
-    'Dim intervalValue As Integer: intervalValue = 0
     On Error GoTo TickingLet_Error
 
     If mTicking <> newValue Then mTicking = newValue Else Exit Property
     
     If mTicking Then
-'        If mPointerAnimate Then
-'            'intervalValue = 100
-'        Else
-'            'intervalValue = 500
-'        End If
-
         tmrSampler.Enabled = True
     Else
         tmrSampler.Enabled = False
@@ -563,7 +556,7 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
-    Dim I As Long: I = 0
+    Dim i As Long: i = 0
     Dim Arr As Variant
     Dim Key As String: Key = vbNullString
     Dim Pat As cCairoPattern
@@ -593,9 +586,9 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     
     txtWirelessPercent = CStr(Int(wirelessPercent))
 
-    For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
-      Arr = cCollOverlayImages.ItemByIndex(I)
-      Key = cCollOverlayImages.KeyByIndex(I)
+    For i = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
+      Arr = cCollOverlayImages.ItemByIndex(i)
+      Key = cCollOverlayImages.KeyByIndex(i)
       
       If IsArray(Arr) Then
              CC.Save
@@ -741,6 +734,8 @@ Private Sub tmrSampler_Timer()
             
             ' get the list of Wireless and the count
             Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
+            
+            'Call BasicServiceSet(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
         
             If mThisWirelessNo <> "9999" Then
                 wirelessPercent = fWireless_Usage_Percent
@@ -820,6 +815,8 @@ Private Sub obtainwirelesss()
         End If
                 
         SDeg = (wirelessPercent * 3) + 30
+        
+        'Call BasicServiceSet(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessCount)
         
         W.Refresh
     

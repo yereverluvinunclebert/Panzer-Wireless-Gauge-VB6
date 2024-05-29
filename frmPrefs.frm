@@ -57,7 +57,7 @@ Begin VB.Form panzerPrefs
             Style           =   2  'Dropdown List
             TabIndex        =   145
             Top             =   975
-            Width           =   3720
+            Width           =   4320
          End
          Begin VB.CheckBox chkGenStartup 
             Caption         =   "Run the Wireless Widget at Windows Startup "
@@ -73,9 +73,9 @@ Begin VB.Form panzerPrefs
             Left            =   1875
             TabIndex        =   155
             ToolTipText     =   "Setting the sampling interval affects the frequency of the pointer updates."
-            Top             =   3015
-            Width           =   3870
-            _ExtentX        =   6826
+            Top             =   3000
+            Width           =   4515
+            _ExtentX        =   7964
             _ExtentY        =   688
             Min             =   1
             Max             =   30
@@ -83,7 +83,7 @@ Begin VB.Form panzerPrefs
             SelStart        =   20
          End
          Begin VB.Label lblGeneral 
-            Caption         =   "Select the wireless adapter to monitor here or by using the middle button on the gauge surround. *"
+            Caption         =   "Select the wireless connection points to monitor here (or by using the middle button on the gauge surround)."
             Height          =   660
             Index           =   1
             Left            =   2040
@@ -92,10 +92,10 @@ Begin VB.Form panzerPrefs
             Width           =   3810
          End
          Begin VB.Label lblGeneral 
-            Caption         =   "Wireless Adapter :"
+            Caption         =   "Wifi Access Points :"
             Height          =   480
             Index           =   4
-            Left            =   495
+            Left            =   390
             TabIndex        =   162
             Top             =   2010
             Width           =   1530
@@ -107,7 +107,7 @@ Begin VB.Form panzerPrefs
             Left            =   2010
             TabIndex        =   160
             Top             =   3795
-            Width           =   3810
+            Width           =   4230
          End
          Begin VB.Label lblWindowLevel 
             Caption         =   "Sampling Interval :"
@@ -122,7 +122,7 @@ Begin VB.Form panzerPrefs
             Caption         =   "15"
             Height          =   315
             Index           =   12
-            Left            =   3600
+            Left            =   4095
             TabIndex        =   158
             Top             =   3480
             Width           =   840
@@ -131,9 +131,9 @@ Begin VB.Form panzerPrefs
             Caption         =   "30"
             Height          =   315
             Index           =   11
-            Left            =   5370
+            Left            =   6060
             TabIndex        =   157
-            Top             =   3480
+            Top             =   3495
             Width           =   405
          End
          Begin VB.Label lblWindowLevel 
@@ -3184,6 +3184,10 @@ Private Sub btnClose_Click()
     Me.themeTimer.Enabled = False
     
     Call writePrefsPosition
+    
+    If PzGGaugeFunctions = "1" Then
+        overlayWidget.Ticking = True
+    End If
 
    On Error GoTo 0
    Exit Sub
@@ -3553,7 +3557,7 @@ End Sub
 '
 Private Sub adjustPrefsControls()
     
-    Dim I As Integer: I = 0
+    Dim i As Integer: i = 0
     Dim fntWeight As Integer: fntWeight = 0
     Dim fntStyle As Boolean: fntStyle = False
     Dim sliGaugeSizeOldValue As Long: sliGaugeSizeOldValue = 0
@@ -3686,7 +3690,7 @@ End Sub
 '---------------------------------------------------------------------------------------
 
 Private Sub populatePrefsComboBoxes()
-    Dim I As Integer: I = 0
+    Dim i As Integer: i = 0
     
     On Error GoTo populatePrefsComboBoxes_Error
     
@@ -3754,14 +3758,14 @@ Private Sub populatePrefsComboBoxes()
     cmbTickSwitchPref.ItemData(1) = 1
     
     If gblWirelessCount = 0 Then
-        cmbCurrentWireless.AddItem "none", I
-        cmbCurrentWireless.ItemData(I) = 9999
+        cmbCurrentWireless.AddItem "none", i
+        cmbCurrentWireless.ItemData(i) = 9999
     Else
-        For I = 0 To (gblWirelessCount - 1)
-            If gblWirelessSSIDArray(I) = "" Then Exit For
-            cmbCurrentWireless.AddItem "Wireless " & (I + 1) & " " & gblWirelessSSIDArray(I) & " " & gblWirelessSSIDArray(I), I
-            cmbCurrentWireless.ItemData(I) = I
-        Next I
+        For i = 0 To (gblWirelessCount - 1)
+            If gblWirelessSSIDArray(i) = "" Then Exit For
+            cmbCurrentWireless.AddItem "Wireless " & (i + 1) & " " & gblWirelessSSIDArray(i) & " " & gblWirelessPercentArray(i) & "%", i
+            cmbCurrentWireless.ItemData(i) = i
+        Next i
     End If
 
     On Error GoTo 0
@@ -3987,6 +3991,10 @@ Private Sub Form_Unload(Cancel As Integer)
     Call writePrefsPosition
     
     Call DestroyToolTip
+    
+    If PzGGaugeFunctions = "1" Then
+        overlayWidget.Ticking = True
+    End If
 
    On Error GoTo 0
    Exit Sub
@@ -5958,13 +5966,13 @@ Public Sub setPrefsFormZordering()
 
    On Error GoTo setPrefsFormZordering_Error
 
-    If Val(PzGWindowLevel) = 0 Then
-        Call SetWindowPos(Me.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
-    ElseIf Val(PzGWindowLevel) = 1 Then
-        Call SetWindowPos(Me.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
-    ElseIf Val(PzGWindowLevel) = 2 Then
-        Call SetWindowPos(Me.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
-    End If
+'    If Val(PzGWindowLevel) = 0 Then
+'        Call SetWindowPos(Me.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
+'    ElseIf Val(PzGWindowLevel) = 1 Then
+'        Call SetWindowPos(Me.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
+'    ElseIf Val(PzGWindowLevel) = 2 Then
+'        Call SetWindowPos(Me.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
+'    End If
 
    On Error GoTo 0
    Exit Sub

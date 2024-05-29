@@ -2156,7 +2156,7 @@ Public Sub unloadAllForms(ByVal endItAll As Boolean)
     ' unload the native VB6 and RC6 forms
     
     Unload panzerPrefs
-    'Unload frmLicence
+    Unload frmMessage
     Unload frmTimer
     Unload menuForm
 
@@ -2168,15 +2168,15 @@ Public Sub unloadAllForms(ByVal endItAll As Boolean)
     ' remove all variable references to each form in turn
     
     Set panzerPrefs = Nothing
+    Set frmMessage = Nothing
+    Set frmTimer = Nothing
+    Set menuForm = Nothing
+    
     Set fMain.aboutForm = Nothing
     Set fMain.helpForm = Nothing
     Set fAlpha.gaugeForm = Nothing
     Set fMain.licenceForm = Nothing
-    
-    'Set frmLicence = Nothing
-    Set frmTimer = Nothing
-    Set menuForm = Nothing
-    
+
     If endItAll = True Then End
 
    On Error GoTo 0
@@ -2266,14 +2266,10 @@ End Sub
 '
 Public Sub makeProgramPreferencesAvailable()
     On Error GoTo makeProgramPreferencesAvailable_Error
-'    Dim debugFlg As Integer: debugFlg = 1
     
-'    If debugFlg = 1 Then
-'
-'        MsgBox "panzerPrefs.Visible " & panzerPrefs.Visible
-'        MsgBox "panzerPrefs.WindowState " & panzerPrefs.WindowState
-'
-'    End If
+    If PzGGaugeFunctions = "1" Then
+        overlayWidget.Ticking = False
+    End If
     
     If panzerPrefs.IsVisible = False Then
         panzerPrefs.Visible = True
@@ -2769,9 +2765,9 @@ Public Function ArrayString(ParamArray tokens()) As String()
     On Error GoTo ArrayString_Error
 
     ReDim Arr(UBound(tokens)) As String
-    Dim I As Long
-    For I = 0 To UBound(tokens)
-        Arr(I) = tokens(I)
+    Dim i As Long
+    For i = 0 To UBound(tokens)
+        Arr(i) = tokens(i)
     Next
     ArrayString = Arr
 
@@ -2795,11 +2791,11 @@ End Function
 Public Sub getgblWirelessArray(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessCount As Integer)
     
     'Dim thisWirelessCount As Integer: thisWirelessCount = 0
-    Dim I As Integer
+    Dim i As Integer
     
     On Error GoTo getGblWirelessArray_Error
     
-    Call ScanWireless(thisArray, thisWirelessPercentArray, thisWirelessCount)
+    Call BasicServiceSet(thisArray, thisWirelessPercentArray, thisWirelessCount)
     
 '    Debug.Print (thisArray(0))
 '    Debug.Print (thisWirelessPercentArray(0))
