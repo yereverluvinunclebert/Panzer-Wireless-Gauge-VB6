@@ -6,9 +6,7 @@ DONE
 
 TODO
 
-' if the wireless scan reveals a different number of access points then
-'    repopulate the cmbList
-'    select the currently connected access point
+' remove the middle button
 
 ' credit to couttsj
 

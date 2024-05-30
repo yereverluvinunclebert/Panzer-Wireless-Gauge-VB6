@@ -145,7 +145,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     'Call ScanWireless(gblWirelessCount)
     
     ' get the list of Wireless and the count
-    Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount, 0)
+    Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
     
 '    Debug.Print gblWirelessSSIDArray(0)
 '    Debug.Print gblWirelessPercentArray(0)
@@ -527,9 +527,9 @@ Public Sub adjustMainControls()
     End If
 
     'If PzGPercentWireless <> "" Then overlayWidget.thisWireless = PzGPercentWireless
-    PzGPercentWireless = "0"
+    'PzGPercentWireless = "0"
     
-    overlayWidget.thisWirelessNo = Val(PzGPercentWireless)
+    'overlayWidget.thisWirelessNo = Val(PzGPercentWireless)
     overlayWidget.thisOpacity = Val(PzGOpacity)
     overlayWidget.samplingInterval = Val(PzGSamplingInterval)
     
@@ -597,7 +597,7 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         PzGGaugeFunctions = fGetINISetting(location, "gaugeFunctions", PzGSettingsFile)
         PzGPointerAnimate = fGetINISetting(location, "pointerAnimate", PzGSettingsFile)
         PzGSamplingInterval = fGetINISetting(location, "samplingInterval", PzGSettingsFile)
-        PzGPercentWireless = fGetINISetting(location, "percentWireless", PzGSettingsFile)
+        'PzGPercentWireless = fGetINISetting(location, "percentWireless", PzGSettingsFile)
         
         
 '        PzGClockFaceSwitchPref = fGetINISetting(location, "clockFaceSwitchPref", PzGSettingsFile)
@@ -700,7 +700,7 @@ Public Sub validateInputs()
         If PzGPointerAnimate = vbNullString Then PzGPointerAnimate = "0"
         If PzGSamplingInterval = vbNullString Then PzGSamplingInterval = "3"
         
-        If PzGPercentWireless = vbNullString Then PzGPercentWireless = "0"
+        'If PzGPercentWireless = vbNullString Then PzGPercentWireless = "0"
         
         'If PzGClockFaceSwitchPref = vbNullString Then PzGClockFaceSwitchPref = "0"
 

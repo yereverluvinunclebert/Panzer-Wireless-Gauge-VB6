@@ -292,7 +292,7 @@ Public PzGGaugeFunctions As String
 'Public PzGAnimationInterval As String
 Public PzGPointerAnimate As String
 Public PzGSamplingInterval As String
-Public PzGPercentWireless As String
+'Public PzGPercentWireless As String
 
 ' config
 Public PzGEnableTooltips As String
@@ -2789,13 +2789,13 @@ End Function
 ' Author: beededea
 ' Date: 13/01/2024
 ' ----------------------------------------------------------------
-Public Sub getgblWirelessArray(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef thisWirelessCount As Integer, ByRef connectedAPoint As Integer)
+Public Sub getgblWirelessArray(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef thisWirelessCount As Integer)
     
     Dim I As Integer
     
     On Error GoTo getGblWirelessArray_Error
     
-    Call ScanWireless(thisArray, thisWirelessPercentArray, thisWirelessRSSIArray, thisWirelessCount, connectedAPoint)
+    Call ScanWireless(thisArray, thisWirelessPercentArray, thisWirelessRSSIArray, thisWirelessCount)
     
         
     On Error GoTo 0
@@ -2808,24 +2808,3 @@ getGblWirelessArray_Error:
 End Sub
 
 
-Public Sub populateWirelessAccessPoints(ByVal connectedAPoint As Integer)
-    Dim I As Integer: I = 0
-    
-    panzerPrefs.cmbCurrentWireless.Clear
-
-    If gblWirelessCount = 0 Then
-        panzerPrefs.cmbCurrentWireless.AddItem "none", 0
-        panzerPrefs.cmbCurrentWireless.ItemData(0) = 9999
-    Else
-        For I = 0 To (gblWirelessCount - 1)
-            If gblWirelessSSIDArray(I) = "" Then Exit For
-            panzerPrefs.cmbCurrentWireless.AddItem "Wireless " & (I + 1) & " (" & gblWirelessPercentArray(I) & "%) " & gblWirelessSSIDArray(I), I
-            panzerPrefs.cmbCurrentWireless.ItemData(I) = I
-        Next I
-    End If
-    
-    ' prefs combo matches stored current Wireless
-    panzerPrefs.cmbCurrentWireless.ListIndex = Val(PzGPercentWireless)
-    
-
-End Sub

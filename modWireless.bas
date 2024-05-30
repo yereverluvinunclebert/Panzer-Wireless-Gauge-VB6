@@ -145,7 +145,18 @@ Private bBuffer() As Byte
 
 
 
+' ----------------------------------------------------------------
+' Procedure Name: ByteToStr
+' Purpose:
+' Procedure Kind: Function
+' Procedure Access: Private
+' Parameter bArray (Byte):
+' Return Type: String
+' Author: beededea
+' Date: 30/05/2024
+' ----------------------------------------------------------------
 Private Function ByteToStr(bArray() As Byte) As String
+    On Error GoTo ByteToStr_Error
     Dim lPntr As Long
     Dim bTmp() As Byte
     On Error GoTo ByteErr
@@ -157,20 +168,17 @@ Private Function ByteToStr(bArray() As Byte) As String
     Exit Function
 ByteErr:
     ByteToStr = ""
+    
+    On Error GoTo 0
+    Exit Function
+
+ByteToStr_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ByteToStr, line " & Erl & "."
+
 End Function
 
 
-
-
-Private Function MACtoString(bMAC() As Byte) As String
-    Dim sTmp As String
-    MACtoString = Right$("0" & Hex$(bMAC(0)), 2) & "-" _
-        & Right$("0" & Hex$(bMAC(1)), 2) & "-" _
-        & Right$("0" & Hex$(bMAC(2)), 2) & "-" _
-        & Right$("0" & Hex$(bMAC(3)), 2) & "-" _
-        & Right$("0" & Hex$(bMAC(4)), 2) & "-" _
-        & Right$("0" & Hex$(bMAC(5)), 2)
-End Function
 
 ' ----------------------------------------------------------------
 ' Procedure Name: ScanWireless
@@ -184,7 +192,7 @@ End Function
 ' Author: beededea
 ' Date: 30/05/2024
 ' ----------------------------------------------------------------
-Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef lCount As Integer, ByRef connectedAPoint As Integer)
+Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef lCount As Integer)
 
     On Error GoTo ScanWireless_Error
     Dim lRet As Long
@@ -291,10 +299,9 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
     Else
         MsgBox "No Wireless Adapters Found"
     End If
-    'Call DebugPrintByte("bBuffer", bBuffer)
     If ConIndex > -1 Then 'Display connected network
         Connected = Trim(Left$(thisArray(ConIndex), 25))
-        connectedAPoint = ConIndex
+        overlayWidget.thisWirelessNo = ConIndex
     End If
     
     On Error GoTo 0

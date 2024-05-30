@@ -158,7 +158,7 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click here to toggle the tick type from once per interval to a more fluid, continuous movement.", _
                      TTIconInfo, widgetName & " Tick Button Help", , , , True
             Case "housing/switchfacesbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button selects the next access point to monitor.", _
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button is non-functional in this widget.", _
                      TTIconInfo, widgetName & " Switch Faces Button Help", , , , True
             Case "housing/stopbutton"
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button stops all animated clock functions for this widget, hand movements &c .", _
@@ -371,17 +371,17 @@ End Sub
 '
 Private Sub switchfacesbutton_mouseUp(ByRef Sender As Object)
     Dim fileToPlay As String: fileToPlay = vbNullString
-    Dim currWirelessNo As Integer: currWirelessNo = 0
+'    Dim currWirelessNo As Integer: currWirelessNo = 0
     
     On Error GoTo switchfacesbutton_mouseUp_Error
 
     Sender.Widget.Alpha = Val(PzGOpacity) / 100
     Sender.Widget.Refresh
     
-    currWirelessNo = overlayWidget.thisWirelessNo
-    currWirelessNo = currWirelessNo + 1
-    If currWirelessNo >= gblWirelessCount - 1 Then currWirelessNo = 0
-    overlayWidget.thisWirelessNo = currWirelessNo
+'    currWirelessNo = overlayWidget.thisWirelessNo
+'    currWirelessNo = currWirelessNo + 1
+'    If currWirelessNo >= gblWirelessCount - 1 Then currWirelessNo = 0
+'    overlayWidget.thisWirelessNo = currWirelessNo
         
     fileToPlay = "till.wav"
     If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then

@@ -23,6 +23,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private wirelessPercent As Long
+Private wirelessRSSI As Long
 
 Private Declare Function SafeArrayGetDim Lib "oleaut32.dll" (ByRef saArray() As Any) As Long
 
@@ -564,7 +565,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     Dim Key As String: Key = vbNullString
     Dim Pat As cCairoPattern
     Dim txtWirelessPercent As String: txtWirelessPercent = vbNullString
-    Dim txtWirelessCurrent As String: txtWirelessCurrent = vbNullString
+    Dim txtWirelessRSSI As String: txtWirelessRSSI = vbNullString
     Dim textDrawn As Boolean:   textDrawn = False
     Dim someOpacity As Double: someOpacity = 0
     Dim cream As String: cream = vbNullString
@@ -579,6 +580,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     On Error GoTo W_Paint_Error
     
     'set some Font- and ForeColor-Properties and draw some Text on the Widget
+    
     W.FontName = "arial"
     W.ForeColor = cream
     W.FontSize = 18
@@ -588,6 +590,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     someOpacity = (Val(mThisOpacity) / 100) * 0.75
     
     txtWirelessPercent = CStr(Int(wirelessPercent))
+    txtWirelessRSSI = wirelessRSSI
 
     For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
       Arr = cCollOverlayImages.ItemByIndex(I)
@@ -640,11 +643,11 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     W.Refresh
                     
                     leftmostMax = 265
-                    leftmostCurr = 405
+                    leftmostCurr = 455
                     
                      ' draw the date and day in the windows just once to retain opacity
                     CC.DrawText leftmostMax, 103, 200, 200, txtWirelessPercent, , , 2, True, , someOpacity
-                    CC.DrawText leftmostCurr, 103, 200, 200, txtWirelessCurrent, , , 2, True, , someOpacity
+                    CC.DrawText leftmostCurr, 300, 200, 200, txtWirelessRSSI, , , 2, True, , someOpacity
                     textDrawn = True
                     
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(11, 246) 'shift to the "rotation-point" within the Pattern
@@ -736,12 +739,14 @@ Private Sub tmrSampler_Timer()
             oldSDeg = SDeg
             
             ' get the list of Wireless and the count
-            Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount, 0)
+            Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
                     
             If mThisWirelessNo <> "9999" Then
                 wirelessPercent = fWireless_Usage_Percent
+                wirelessRSSI = fWireless_RSSI
             Else
                 wirelessPercent = 0
+                wirelessRSSI = 0
             End If
                        
             ' calculate the new signal strength amount in degrees
@@ -805,14 +810,16 @@ Private Sub obtainwirelesss()
     On Error GoTo obtainwirelesss_Error
     
         ' get the list of Wirelesss and the count
-        Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount, 0)
+        Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
         
         Debug.Print gblWirelessSSIDArray(0)
     
         If mThisWirelessNo <> "9999" Then
             wirelessPercent = fWireless_Usage_Percent
+            wirelessRSSI = fWireless_RSSI
         Else
             wirelessPercent = 0
+            wirelessRSSI = 0
         End If
                 
         SDeg = (wirelessPercent * 3) + 30
@@ -829,7 +836,7 @@ obtainwirelesss_Error:
 End Sub
 
 ' ----------------------------------------------------------------
-' Procedure Name: fWireless_Usage_Current
+' Procedure Name: fWireless_Usage_Percent
 ' Purpose:
 ' Procedure Kind: Function
 ' Procedure Access: Private
@@ -856,10 +863,38 @@ fWireless_Usage_Percent_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fWireless_Usage_Percent, line " & Erl & "."
 
- 
 End Function
 
 
+' ----------------------------------------------------------------
+' Procedure Name: fWireless_RSSI
+' Purpose:
+' Procedure Kind: Function
+' Procedure Access: Private
+' Return Type: Long
+' Author:
+' Date: 09/01/2024
+' ----------------------------------------------------------------
+Private Function fWireless_RSSI() As Long
+    Dim newT As Integer
+    
+    On Error GoTo fWireless_RSSI_Error
+    
+    If SafeArrayGetDim(gblWirelessRSSIArray) <> 0 Then
+        newT = gblWirelessRSSIArray(overlayWidget.thisWirelessNo)
+    Else
+        newT = 0
+    End If
 
+    fWireless_RSSI = newT
+     
+    On Error GoTo 0
+    Exit Function
+
+fWireless_RSSI_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fWireless_RSSI, line " & Erl & "."
+ 
+End Function
 
 

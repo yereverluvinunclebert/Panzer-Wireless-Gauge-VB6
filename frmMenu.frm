@@ -542,12 +542,10 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub mnuScanWireless_Click()
-    Dim connectedAPoint As Integer: connectedAPoint = 0
     
     On Error GoTo mnuScanWireless_Click_Error
     
-    Call ScanWireless(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount, connectedAPoint)
-    Call populateWirelessAccessPoints(connectedAPoint)
+    Call ScanWireless(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
     
     On Error GoTo 0
     Exit Sub
