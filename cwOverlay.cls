@@ -381,6 +381,9 @@ Public Property Let thisWirelessNo(ByVal newValue As Integer)
     'given a Wireless number select the Wireless string
     If mThisWirelessNo < gblWirelessCount Then
         mThisWireless = gblWirelessSSIDArray(mThisWirelessNo)
+        If mThisWirelessNo = 10 Then
+            mThisWirelessNo = 10
+        End If
     End If
     
     Call obtainwirelesss
@@ -556,7 +559,7 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
-    Dim i As Long: i = 0
+    Dim I As Long: I = 0
     Dim Arr As Variant
     Dim Key As String: Key = vbNullString
     Dim Pat As cCairoPattern
@@ -586,9 +589,9 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     
     txtWirelessPercent = CStr(Int(wirelessPercent))
 
-    For i = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
-      Arr = cCollOverlayImages.ItemByIndex(i)
-      Key = cCollOverlayImages.KeyByIndex(i)
+    For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
+      Arr = cCollOverlayImages.ItemByIndex(I)
+      Key = cCollOverlayImages.KeyByIndex(I)
       
       If IsArray(Arr) Then
              CC.Save
@@ -733,7 +736,7 @@ Private Sub tmrSampler_Timer()
             oldSDeg = SDeg
             
             ' get the list of Wireless and the count
-            Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
+            Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount, 0)
                     
             If mThisWirelessNo <> "9999" Then
                 wirelessPercent = fWireless_Usage_Percent
@@ -802,7 +805,7 @@ Private Sub obtainwirelesss()
     On Error GoTo obtainwirelesss_Error
     
         ' get the list of Wirelesss and the count
-        Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
+        Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount, 0)
         
         Debug.Print gblWirelessSSIDArray(0)
     

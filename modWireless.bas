@@ -1,8 +1,6 @@
 Attribute VB_Name = "modWireless"
 Option Explicit
 
-'Private Const WLAN_NOTIFICATION_SOURCE_MOST As Long = &H7F
-
 Private Enum DOT11_PHY_TYPE
     dot11_phy_type_unknown = 0
     dot11_phy_type_any = 0
@@ -23,31 +21,6 @@ Private Enum DOT11_BSS_TYPE
     DOT11_BSS_TYPE_ANY = 3
 End Enum
 
-'Private Enum DOT11_AUTH_ALGORITHM
-'    DOT11_AUTH_ALGO_80211_OPEN = 1
-'    DOT11_AUTH_ALGO_80211_SHARED_KEY = 2
-'    DOT11_AUTH_ALGO_WPA = 3
-'    DOT11_AUTH_ALGO_WPA_PSK = 4
-'    DOT11_AUTH_ALGO_WPA_NONE = 5
-'    DOT11_AUTH_ALGO_RSNA = 6
-'    DOT11_AUTH_ALGO_RSNA_PSK = 7
-'    DOT11_AUTH_ALGO_IHV_START = &H80000000
-'    DOT11_AUTH_ALGO_IHV_END = &HFFFFFFFF
-'End Enum
-
-'Private Enum DOT11_CIPHER_ALGORITHM
-'    DOT11_CIPHER_ALGO_NONE = &H0
-'    DOT11_CIPHER_ALGO_WEP40 = &H1
-'    DOT11_CIPHER_ALGO_TKIP = &H2
-'    DOT11_CIPHER_ALGO_CCMP = &H4
-'    DOT11_CIPHER_ALGO_WEP104 = &H5
-'    DOT11_CIPHER_ALGO_WPA_USE_GROUP = &H100
-'    DOT11_CIPHER_ALGO_RSN_USE_GROUP = &H100
-'    DOT11_CIPHER_ALGO_WEP = &H101
-'    DOT11_CIPHER_ALGO_IHV_START = &H80000000
-'    DOT11_CIPHER_ALGO_IHV_END = &HFFFFFFFF
-'End Enum
-
 Private Type GUID
     data1 As Long
     data2 As Integer
@@ -61,11 +34,6 @@ Private Type WLAN_INTERFACE_INFO
     IsState As Long
 End Type
 
-'Private Type WLAN_INTERFACE_INFO
-'    ifGuid(0 To 15) As Byte
-'    InterfaceDescription(0 To 511) As Byte
-'    IsState As WLAN_INTERFACE_STATE
-'End Type
 
 Private Type DOT11_SSID
     uSSIDLength As Long
@@ -81,27 +49,6 @@ Private Type FILETIME
     dwLowDateTime As Long
     dwHighDateTime As Long
 End Type
-
-Private Type SYSTEMTIME
-    wYear As Integer
-    wMonth As Integer
-    wDayOfWeek As Integer
-    wDay As Integer
-    wHour As Integer
-    wMinute As Integer
-    wSecond As Integer
-    wMilliseconds As Integer
-End Type
-
-'Private Type TIME_ZONE_INFORMATION
-'   Bias As Long
-'   StandardName(0 To 63) As Byte  'unicode (0-based)
-'   StandardDate As SYSTEMTIME
-'   StandardBias As Long
-'   DaylightName(0 To 63) As Byte  'unicode (0-based)
-'   DaylightDate As SYSTEMTIME
-'   DaylightBias As Long
-'End Type
 
 Private Type WLAN_AVAILABLE_NETWORK
     strProfileName(511) As Byte
@@ -138,24 +85,6 @@ Private Type AVAILABLE_NETWORK
     dwreserved As Long
 End Type
 
-'Private Type WLAN_BSS_ENTRY
-'    dot11Ssid As DOT11_SSID
-'    phyId As Long
-'    dot11Bssid(5) As Byte
-'    dot11BssType As DOT11_BSS_TYPE
-'    dot11BssPhyType As DOT11_PHY_TYPE
-'    rssi As Long
-'    LinkQuality As Long
-'    inRegDomain As Boolean
-'    BeaconPeriod As Long
-'    timestamp As Currency
-'    hostTimestamp As Currency
-'    CapabilityInformation As Long
-'    chCenterFrequency As Long
-'    wlanRateSet As WLAN_RATE_SET
-'    ieOffset As Long
-'    ieSize As Long
-'End Type
 
 Private Type WLAN_BSS_ENTRY
     dot11Ssid As DOT11_SSID
@@ -188,15 +117,6 @@ Private Type WLAN_AVAILABLE_NETWORK_LIST
     Network As WLAN_AVAILABLE_NETWORK
 End Type
 
-'Private Type WLAN_CONNECTION_PARAMETERS
-'    ConnectionMode As Long
-'    Profile As Long
-'    pDot11Ssid As Long
-'    pDesiredBssidList As Long
-'    dot11BssType As Long
-'    dwFlags As Long
-'End Type
-
 Private Type WLAN_BSS_LIST
     dwTotalSize As Long
     dwNumberofItems As Long
@@ -206,84 +126,23 @@ End Type
 Private Declare Function WlanOpenHandle Lib "wlanapi.dll" (ByVal dwClientVersion As Long, ByVal pdwReserved As Long, ByRef pdwNegotiaitedVersion As Long, ByRef phClientHandle As Long) As Long
 Private Declare Function WlanEnumInterfaces Lib "wlanapi.dll" (ByVal hClientHandle As Long, ByVal pReserved As Long, ppInterfaceList As Long) As Long
 Private Declare Function WlanGetAvailableNetworkList Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As GUID, ByVal dwFlags As Long, ByVal pReserved As Long, ppAvailableNetworkList As Long) As Long
-'Private Declare Function WlanConnect Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As GUID, pConnectionParameters As WLAN_CONNECTION_PARAMETERS, ByVal reserved As Long) As Long
 Private Declare Function WlanScan Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As GUID, pDot11Ssid As Long, pIeData As Long, reserved As Long) As Long
-'Private Declare Function WlanDisconnect Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As GUID, ByVal pReserved As Long) As Long
-'Private Declare Function WlanGetNetworkBssList Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGui As GUID, ByVal pDot11Ssid As Long, ByVal dot11BssType As Long, ByVal bSecurityEnabled As Long, ByVal pReserved As Long, ppWlanBssList As WLAN_BSS_LIST) As Long
 Private Declare Function WlanGetNetworkBssList Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGui As GUID, ByVal pDot11Ssid As Long, ByVal dot11BssType As Long, ByVal bSecurityEnabled As Long, ByVal pReserved As Long, ppWlanBssList As Long) As Long
 Private Declare Function WlanGetProfile Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As GUID, ByVal strProfileName As Long, ByVal pReserved As Long, pstrProfileXml As Long, pdwFlags As Long, pdwGrantedAccess As Long) As Long
-'Private Declare Function WlanGetProfile Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As Any, ByVal strProfileName As Long, ByVal pReserved As Long, pStrProfileXML As Long, pdwFlags As Long, pdwGrantedAccess As Long) As Long
-'Private Declare Function CreateEvent Lib "kernel32.dll" Alias "CreateEventA" (lpEventAttributes As Long, ByVal bManualReset As Long, ByVal bInitialState As Long, ByVal lpName As String) As Long
-'Private Declare Function WaitForSingleObject Lib "kernel32.dll" (ByVal hHandle As Long, ByVal dwMilliseconds As Long) As Long
 Private Declare Sub CopyMemory Lib "kernel32.dll" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
 Private Declare Sub WlanFreeMemory Lib "wlanapi.dll" (ByVal pMemory As Long)
 Private Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
 Private Declare Function lstrlenW& Lib "kernel32.dll" (ByVal lpszSrc&)
-'Private Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
-'Private Declare Function GetTimeZoneInformation Lib "kernel32" (lpTimeZoneInformation As TIME_ZONE_INFORMATION) As Long
-'Private Declare Function FileTimeToLocalFileTime Lib "kernel32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
+
 Private udtList As WLAN_INTERFACE_INFO_LIST
 Private udtBSSList As WLAN_BSS_LIST
-Private ConIndex As Long
+Private ConIndex As Integer
 Private lHandle As Long
 Private lVersion As Long
 Private Connected As String
 Private bBuffer() As Byte
 
-Public Sub BasicServiceSet(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef lCount As Integer)
-    Dim lBSS As Long
-    Dim lRet As Long
-    Dim sLen As Long
-    Dim lStart As Long
-    'Dim lCount As Long
-    Dim sSSID As String
-    Dim sMAC As String
-    Dim bTmp() As Byte
-    Dim ListArray(7) As String
-    Dim BSSInfo() As Byte
-    Dim udtBSS As WLAN_BSS_ENTRY
-    lRet = WlanGetNetworkBssList(lHandle, udtList.InterfaceInfo.ifGuid, 0&, DOT11_BSS_TYPE.DOT11_BSS_TYPE_ANY, False, 0&, lBSS)
-    CopyMemory udtBSSList, ByVal lBSS, LenB(udtBSSList)
-    Debug.Print udtBSSList.dwTotalSize, udtBSSList.dwNumberofItems, udtBSSList.wlanBssEntries
-    If lRet Then
-        Debug.Print "Error: "; CStr(lRet)
-        MsgBox "No BSS Info Available!"
-    Else
-        lStart = lBSS + 8
-        lCount = 0
-                
-        ReDim thisArray(udtBSSList.dwNumberofItems) As String
-        ReDim thisWirelessPercentArray(udtBSSList.dwNumberofItems) As Integer
-        ReDim thisWirelessRSSIArray(udtBSSList.dwNumberofItems) As Integer
 
-        Do
-            CopyMemory udtBSS, ByVal lStart, Len(udtBSS)
-            
-            sLen = udtBSS.dot11Ssid.uSSIDLength
-             If sLen = 0 Then
-                sSSID = "(Unknown)"
-            Else
-                ReDim bTmp(sLen - 1)
-                CopyMemory bTmp(0), udtBSS.dot11Ssid.ucSSID(0), sLen
-                sSSID = ByteToStr(bTmp)
-            End If
-            'ListArray(0) = CStr(lCount + 1)
-            'ListArray(1) = sSSID
-            'sMAC = MACtoString(udtBSS.dot11Bssid)
-
-            ListArray(4) = udtBSS.lRssi
-            'ListArray(5) = udtBSS.uLinkQuality
-            
-            thisArray(lCount) = sSSID
-            thisWirelessPercentArray(lCount) = udtBSS.uLinkQuality
-            thisWirelessRSSIArray(lCount) = udtBSS.lRssi
-
-            lCount = lCount + 1
-            lStart = lStart + Len(udtBSS)
-        Loop Until lCount = udtBSSList.dwNumberofItems
-        WlanFreeMemory lBSS
-    End If
-End Sub
 
 
 Private Function ByteToStr(bArray() As Byte) As String
@@ -313,13 +172,25 @@ Private Function MACtoString(bMAC() As Byte) As String
         & Right$("0" & Hex$(bMAC(5)), 2)
 End Function
 
+' ----------------------------------------------------------------
+' Procedure Name: ScanWireless
+' Purpose:
+' Procedure Kind: Sub
+' Procedure Access: Public
+' Parameter thisArray (String):
+' Parameter thisWirelessPercentArray (Integer):
+' Parameter thisWirelessRSSIArray (Integer):
+' Parameter lCount (Integer):
+' Author: beededea
+' Date: 30/05/2024
+' ----------------------------------------------------------------
+Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef lCount As Integer, ByRef connectedAPoint As Integer)
 
-Public Sub ScanWireless(ByRef lCount As Integer)
+    On Error GoTo ScanWireless_Error
     Dim lRet As Long
     Dim lList As Long
     Dim lAvailable As Long
     Dim lStart As Long
-
     Dim sLen As Long
     Dim bSSID() As Byte
     Dim lBSS As Long
@@ -331,24 +202,36 @@ Public Sub ScanWireless(ByRef lCount As Integer)
     Dim dwFlags As Long
     Dim dwreserved As Long
     Dim XMLBuffer(1023) As Byte
-
+            
+    Dim quality As Integer: quality = 0
+    Dim dbm As Integer: dbm = 0
     ConIndex = -1
 
     ReDim bBuffer(0)
+    
+    ' requests a scan for available networks on the indicated interface.
     If lHandle Then
         lRet = WlanScan(lHandle, udtList.InterfaceInfo.ifGuid, ByVal 0&, ByVal 0&, ByVal 0&)
         Screen.MousePointer = vbHourglass
         'Wait for scan to finish
         Sleep 1000
         Screen.MousePointer = vbDefault
-    Else 'Get adapter handle and find WLAN interfaces
+    Else
+    
+    'Get adapter handle and find WLAN interfaces
         lRet = WlanOpenHandle(2&, 0&, lVersion, lHandle)
         'NOTE: This code currently only processes the first wireless adapter
         lRet = WlanEnumInterfaces(ByVal lHandle, 0&, lList)
         CopyMemory udtList, ByVal lList, Len(udtList)
         Debug.Print udtList.dwNumberofItems, "WiFi Adapter found!"
     End If
+    
+'    If savedNumberOfItems <> udtList.dwNumberofItems Then
+'        Call populateWirelessAccessPoints(connectedAPoint)
+'    End If
+
     If udtList.dwNumberofItems > 0 Then
+        'savedNumberOfItems = udtList.dwNumberofItems
         lRet = WlanGetAvailableNetworkList(lHandle, udtList.InterfaceInfo.ifGuid, 2&, 0&, lAvailable)
         CopyMemory udtAvailableList, ByVal lAvailable, LenB(udtAvailableList)
         lCount = 0
@@ -368,8 +251,10 @@ Public Sub ScanWireless(ByRef lCount As Integer)
         lStart = VarPtr(bBuffer(0))
         lCount = 0
         
-'        ReDim thisArray(udtAvailableList.dwNumberofItems) As String
-'        ReDim thisWirelessPercentArray(udtAvailableList.dwNumberofItems) As Integer
+        ReDim thisArray(udtAvailableList.dwNumberofItems) As String
+        ReDim thisWirelessPercentArray(udtAvailableList.dwNumberofItems) As Integer
+        ReDim thisWirelessRSSIArray(udtAvailableList.dwNumberofItems) As Integer
+        
         Do
             CopyMemory Network, ByVal lStart, Len(Network)
             sLen = Network.dot11Ssid.uSSIDLength
@@ -381,11 +266,22 @@ Public Sub ScanWireless(ByRef lCount As Integer)
                 sSSID = ByteToStr(bSSID)
             End If
             Debug.Print "SSID "; sSSID, "Signal "; Network.wlanSignalQuality
-            sSSID = Left$(sSSID & Space$(25), 25) & Network.wlanSignalQuality
-            
-'            thisArray(lCount) = sSSID
-'            thisWirelessPercentArray(lCount) = Network.wlanSignalQuality
+            sSSID = Left$(sSSID & Space$(25), 25)
 
+            thisArray(lCount) = sSSID
+            quality = Network.wlanSignalQuality
+            thisWirelessPercentArray(lCount) = quality
+            
+            If (quality <= 0) Then
+                dbm = -100
+            ElseIf quality >= 100 Then
+                dbm = -50
+            Else
+                dbm = (quality / 2) - 100
+            End If
+            
+            thisWirelessRSSIArray(lCount) = dbm
+            
             If (Network.dwFlags And 1) = 1 Then
                 ConIndex = lCount
             End If
@@ -397,8 +293,17 @@ Public Sub ScanWireless(ByRef lCount As Integer)
     End If
     'Call DebugPrintByte("bBuffer", bBuffer)
     If ConIndex > -1 Then 'Display connected network
-        'Connected = Trim(Left$(thisArray(ConIndex), 25))
+        Connected = Trim(Left$(thisArray(ConIndex), 25))
+        connectedAPoint = ConIndex
     End If
+    
+    On Error GoTo 0
+    Exit Sub
+
+ScanWireless_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ScanWireless, line " & Erl & "."
+
 End Sub
 
 

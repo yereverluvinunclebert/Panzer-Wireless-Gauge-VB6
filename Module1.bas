@@ -779,7 +779,7 @@ Public Sub LoadFileToTB(ByVal TxtBox As Object, ByVal FilePath As String, Option
     'Returns: True if Successful, false otherwise
     
     Dim iFile As Integer: iFile = 0
-    Dim s As String: s = vbNullString
+    Dim S As String: S = vbNullString
     
     On Error GoTo LoadFileToTB_Error
 
@@ -788,15 +788,15 @@ Public Sub LoadFileToTB(ByVal TxtBox As Object, ByVal FilePath As String, Option
     If Dir$(FilePath) = vbNullString Then Exit Sub
     
     On Error GoTo errorhandler:
-    s = TxtBox.Text
+    S = TxtBox.Text
     
     iFile = FreeFile
     Open FilePath For Input As #iFile
-    s = Input(LOF(iFile), #iFile)
+    S = Input(LOF(iFile), #iFile)
     If Append Then
-        TxtBox.Text = TxtBox.Text & s
+        TxtBox.Text = TxtBox.Text & S
     Else
-        TxtBox.Text = s
+        TxtBox.Text = S
     End If
     
     'LoadFileToTB = True
@@ -2766,9 +2766,9 @@ Public Function ArrayString(ParamArray tokens()) As String()
     On Error GoTo ArrayString_Error
 
     ReDim Arr(UBound(tokens)) As String
-    Dim i As Long
-    For i = 0 To UBound(tokens)
-        Arr(i) = tokens(i)
+    Dim I As Long
+    For I = 0 To UBound(tokens)
+        Arr(I) = tokens(I)
     Next
     ArrayString = Arr
 
@@ -2789,17 +2789,13 @@ End Function
 ' Author: beededea
 ' Date: 13/01/2024
 ' ----------------------------------------------------------------
-Public Sub getgblWirelessArray(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef thisWirelessCount As Integer)
+Public Sub getgblWirelessArray(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef thisWirelessCount As Integer, ByRef connectedAPoint As Integer)
     
-    'Dim thisWirelessCount As Integer: thisWirelessCount = 0
-    Dim i As Integer
+    Dim I As Integer
     
     On Error GoTo getGblWirelessArray_Error
     
-    Call BasicServiceSet(thisArray, thisWirelessPercentArray, thisWirelessRSSIArray, thisWirelessCount)
-    
-'    Debug.Print (thisArray(0))
-'    Debug.Print (thisWirelessPercentArray(0))
+    Call ScanWireless(thisArray, thisWirelessPercentArray, thisWirelessRSSIArray, thisWirelessCount, connectedAPoint)
     
         
     On Error GoTo 0
@@ -2811,3 +2807,25 @@ getGblWirelessArray_Error:
 
 End Sub
 
+
+Public Sub populateWirelessAccessPoints(ByVal connectedAPoint As Integer)
+    Dim I As Integer: I = 0
+    
+    panzerPrefs.cmbCurrentWireless.Clear
+
+    If gblWirelessCount = 0 Then
+        panzerPrefs.cmbCurrentWireless.AddItem "none", 0
+        panzerPrefs.cmbCurrentWireless.ItemData(0) = 9999
+    Else
+        For I = 0 To (gblWirelessCount - 1)
+            If gblWirelessSSIDArray(I) = "" Then Exit For
+            panzerPrefs.cmbCurrentWireless.AddItem "Wireless " & (I + 1) & " (" & gblWirelessPercentArray(I) & "%) " & gblWirelessSSIDArray(I), I
+            panzerPrefs.cmbCurrentWireless.ItemData(I) = I
+        Next I
+    End If
+    
+    ' prefs combo matches stored current Wireless
+    panzerPrefs.cmbCurrentWireless.ListIndex = Val(PzGPercentWireless)
+    
+
+End Sub

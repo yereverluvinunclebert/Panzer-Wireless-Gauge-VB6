@@ -68,7 +68,7 @@ Public Sub InitFromPSD(ByRef PSD_FileNameOrByteArray As Variant)
     Const AlphaWithTaskbarEntry As Integer = 6
     Const AlphaNoTaskbarEntry As Integer = 7
   
-    Dim i As Long: i = 0
+    Dim I As Long: I = 0
     Dim W As cWidgetBase
    
     On Error GoTo InitFromPSD_Error
@@ -81,19 +81,19 @@ Public Sub InitFromPSD(ByRef PSD_FileNameOrByteArray As Variant)
         PSDWidth = .Width
         PSDHeight = .Height       'store the original Psd-Pixel-Width/Height in Private vars (as the base from which we calculate the zoomed Form-Width/Height)
     
-        For i = 0 To .LayersCount - 1 ' loop through each of the Layers in the PSD
-            If .LayerByteSize(i) Then  ' this is a true Alpha-Surface-Layer and not just a PSD layer 'group'
-                If .LayerAlphaPercent(i) > 0 Then ' only handles layers that have an opacity greater than 0 - need to note this for the future, this will cause a problem!
+        For I = 0 To .LayersCount - 1 ' loop through each of the Layers in the PSD
+            If .LayerByteSize(I) Then  ' this is a true Alpha-Surface-Layer and not just a PSD layer 'group'
+                If .LayerAlphaPercent(I) > 0 Then ' only handles layers that have an opacity greater than 0 - need to note this for the future, this will cause a problem!
                     'add each current Layer path and surface object into the global ImageList collection (using LayerPath as the ImageKey)
-                    Cairo.ImageList.AddSurface .LayerPath(i), .LayerSurface(i)
+                    Cairo.ImageList.AddSurface .LayerPath(I), .LayerSurface(I)
                     
-                    If collPSDNonUIElements.Exists(.LayerPath(i)) Then ' we do not create Widgets for those in this exclude list.
+                    If collPSDNonUIElements.Exists(.LayerPath(I)) Then ' we do not create Widgets for those in this exclude list.
                         
                         'we add layer info. (used in cwOverlay) to the "excluded paths" previously defined in Sub Main,
-                        collPSDNonUIElements(.LayerPath(i)) = Array(.LayerX(i), .LayerY(i), Val(PzGOpacity) / 100)  'here we update the so far empty slots with the PSD-offsets
+                        collPSDNonUIElements(.LayerPath(I)) = Array(.LayerX(I), .LayerY(I), Val(PzGOpacity) / 100)  'here we update the so far empty slots with the PSD-offsets
                 
                     Else 'everything not in the exclude-list will get its own Widget-instance
-                        Set W = gaugeForm.Widgets.Add(New cwAlphaImg, LCase$(.LayerPath(i)), .LayerX(i), .LayerY(i), .LayerWidth(i), .LayerHeight(i)).Widget
+                        Set W = gaugeForm.Widgets.Add(New cwAlphaImg, LCase$(.LayerPath(I)), .LayerX(I), .LayerY(I), .LayerWidth(I), .LayerHeight(I)).Widget
                             W.ImageKey = W.Key 'W.Key equals ImageList-Key, set above - and LayerPath(i) at this point ... set it also as the ImageKey of our new created Widget
                         If PzGOpacity < 1 Then
                             W.Alpha = Val(PzGOpacity) / 100
@@ -114,7 +114,7 @@ Public Sub InitFromPSD(ByRef PSD_FileNameOrByteArray As Variant)
                     End If
                 End If
             End If
-        Next i
+        Next I
     End With '<-- the Parser-instance will be destroyed here (freeing the Memory, the internal PSD-Layers have occupied)
     
     Set overlayWidget = gaugeForm.Widgets.Add(New cwOverlay, "Overlay", 0, 0, PSDWidth, PSDHeight)
@@ -158,7 +158,7 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click here to toggle the tick type from once per interval to a more fluid, continuous movement.", _
                      TTIconInfo, widgetName & " Tick Button Help", , , , True
             Case "housing/switchfacesbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button is not allocated a function in this particular widget.", _
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button selects the next access point to monitor.", _
                      TTIconInfo, widgetName & " Switch Faces Button Help", , , , True
             Case "housing/stopbutton"
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button stops all animated clock functions for this widget, hand movements &c .", _
@@ -183,7 +183,7 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
             End If
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Network: . " & netWorkName _
                     & vbCrLf & "Signal Level: " & signalLevel & "%" _
-                    & vbCrLf & "Noise Level: " & noiseLevel & "db" _
+                    & vbCrLf & "RSSI value: " & noiseLevel & "db" _
                     & vbCrLf & "" _
                     & vbCrLf & "Right Click to open the menu and the preferences. CTRL+ Mouse scrollwheel UP/DOWN to resize." _
                     , TTIconInfo, widgetName & " Information.", , , , True

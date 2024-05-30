@@ -142,10 +142,10 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     ' place the form at the saved location
     Call makeVisibleFormElements
         
-    Call ScanWireless(gblWirelessCount)
+    'Call ScanWireless(gblWirelessCount)
     
     ' get the list of Wireless and the count
-    Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
+    Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount, 0)
     
 '    Debug.Print gblWirelessSSIDArray(0)
 '    Debug.Print gblWirelessPercentArray(0)

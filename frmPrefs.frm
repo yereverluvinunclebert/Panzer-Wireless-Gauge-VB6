@@ -3557,7 +3557,7 @@ End Sub
 '
 Private Sub adjustPrefsControls()
     
-    Dim i As Integer: i = 0
+    Dim I As Integer: I = 0
     Dim fntWeight As Integer: fntWeight = 0
     Dim fntStyle As Boolean: fntStyle = False
     Dim sliGaugeSizeOldValue As Long: sliGaugeSizeOldValue = 0
@@ -3690,7 +3690,6 @@ End Sub
 '---------------------------------------------------------------------------------------
 
 Private Sub populatePrefsComboBoxes()
-    Dim i As Integer: i = 0
     
     On Error GoTo populatePrefsComboBoxes_Error
     
@@ -3757,16 +3756,7 @@ Private Sub populatePrefsComboBoxes()
     cmbTickSwitchPref.AddItem "Smooth", 1
     cmbTickSwitchPref.ItemData(1) = 1
     
-    If gblWirelessCount = 0 Then
-        cmbCurrentWireless.AddItem "none", i
-        cmbCurrentWireless.ItemData(i) = 9999
-    Else
-        For i = 0 To (gblWirelessCount - 1)
-            If gblWirelessSSIDArray(i) = "" Then Exit For
-            cmbCurrentWireless.AddItem "Wireless " & (i + 1) & " " & gblWirelessSSIDArray(i) & " " & gblWirelessPercentArray(i) & "%", i
-            cmbCurrentWireless.ItemData(i) = i
-        Next i
-    End If
+    Call populateWirelessAccessPoints(0)
 
     On Error GoTo 0
     Exit Sub

@@ -1,83 +1,20 @@
 DONE
 
-' conversion graphics PSD
-' project VBP renamed all contents
-' rename all files
-' tooltips, text all converted justclock, just clock, globe
-' unwanted time controls, code and variables removed from prefs
-' test cpu percent extraction using registry - failure
-' cpu percent extraction using API
-' gauge digital displays
-' pointer rotation
-' icons created and assigned to forms
-' sizing control corrected
-' help image
-' about image
-' menu text changed
-' new sampling control
-' colouring new control
-' initial github synch.
-' readme.md created and updated with new images
 
-' sampling interval vars - done
-' sampling interval var validation - done
-' sampling interval var reading/writing - done
-
-' test .js code and extract the pertinent code that attaches to WMI and replicate
-' lamps added and lit at high temps
-' conversion from C to F
-' switch face from C to F
-
-' balloon tooltips
 
 ' -oOo-
 
 TODO
 
+' if the wireless scan reveals a different number of access points then
+'    repopulate the cmbList
+'    select the currently connected access point
 
-couttsj
-
-' more information signal noise &c
-WLAN_BSS_ENTRY structure has another field called uLinkQuality that returns a value from 0 to 100 and indicates the link quality.  
-I understand this to be a rough measurement of the signal-to-noise ratio (SNR)
-
-Received Signal Strength Indicator (RSSI) value. Smaller negative numbers represent a cleaner/stronger signal. As close to zero as you can get.
-
-
-Depending on your OS and application, WiFi signal strength is represented either as quality in percentage, or an RSSI value in dBm, i.e. -70db. 
-RSSI is usually expressed in decibels relative to a milliwat (dBm) from zero to -120dBm and the closer it is to zero, the stronger the signal is. 
-RSSI level less than -80dBm may not be usable, depending on noise.
-
-Noise (dBm) in wireless communications is a combination of all unwanted interfering signal sources, such as crosstalk, radio frequency interference, 
-distortion, etc. This value is measured in decibels from zero to -120. The closer this value is to -120, the better, because that means there is 
-little to no interference. Typical environments range between -100dBm and -80dBm.
-
-While there is no simple precise solution that is used universally, we will try to explain the approximate correlation between signal (RSSI) 
-and quality (percentage).
-
-Generally,
-dBm >= -50 dBm = 100% quality
-dBm <= -100 dBm = 0% quality
-
-For RSSI signal between -50dBm and -100dBm,
-quality ~= 2* (dBm + 100)
-RSSI ~= (percentage / 2) - 100
-
-For example:
-High quality: 90% ~= -55dBm
-Medium quality: 50% ~= -75dBm
-Low quality: 30% ~= -85dBm
-Unusable quality: 8% ~= -96dBm
-
-See also: How to read RSSI/signal and SNR/noise ratings ?
-
-
+' credit to couttsj
 
 ' html help and images update
-' chm help built
+' chm help build
 ' test autostart
-
-' smooth pointer - flick/smooth
 
 ' add second monitor - wip find cable!
 
@@ -116,6 +53,80 @@ See also: How to read RSSI/signal and SNR/noise ratings ?
 
 ' tooltips also resize when the whole thing is resized, code received from Olaf tested - resizing results in missing text and blank tooltips, using non-standard font centurion light
 ' RC6 needs a static tooltip option.
+
+
+
+
+
+
+
+Answer:
+
+ dBm = (quality / 2) - 100  where quality: [0 to 100]
+
+The answer is to use WlanQueryInterface() (operationally similar to and used in parallel with WlanGetAvailableNetworkList()) to 
+determine the WLAN_CONNECTION_ATTRIBUTES and WLAN_ASSOCIATION_ATTRIBUTES of the connected adapter.
+
+    Int32 iDataSize;
+    IntPtr ppData = IntPtr.Zero;
+    WLAN_CONNECTION_ATTRIBUTES wcaAttributes = new WLAN_CONNECTION_ATTRIBUTES();
+    String[] sReturn = new String[4];
+
+    if (WlanQueryInterface(pClientHandle, ref gInterfaceGUID, WLAN_INTF_OPCODE.wlan_intf_opcode_current_connection, IntPtr.Zero, out iDataSize, ref ppData, IntPtr.Zero) == ERROR_SUCCESS)
+    {
+        wcaAttributes = (WLAN_CONNECTION_ATTRIBUTES)Marshal.PtrToStructure(ppData, typeof(WLAN_CONNECTION_ATTRIBUTES));
+
+        sReturn[0] = wcaAttributes.wlanAssociationAttributes.dot11Ssid.ucSSID;
+        sReturn[1] = wcaAttributes.strProfileName;
+        sReturn[2] = String.Format("{0:X2}-{1:X2}-{2:X2}-{3:X2}-{4:X2}-{5:X2}", wcaAttributes.wlanAssociationAttributes.dot11Bssid.bOne, wcaAttributes.wlanAssociationAttributes.dot11Bssid.bTwo, wcaAttributes.wlanAssociationAttributes.dot11Bssid.bThree, wcaAttributes.wlanAssociationAttributes.dot11Bssid.bFour, wcaAttributes.wlanAssociationAttributes.dot11Bssid.bFive, wcaAttributes.wlanAssociationAttributes.dot11Bssid.bSix);
+        sReturn[3] = wcaAttributes.wlanAssociationAttributes.wlanSignalQuality.ToString(); //This returns 5400 when the actual strength is ~99
+
+        WlanFreeMemory(ppData);
+
+        return sReturn;
+    }
+    else
+    {
+        throw new Exception("Unable to get interface connected SSID.");
+    }
+
+udtList WLAN_INTERFACE_INFO_LIST
+
+udtBSSList WlanGetNetworkBssList
+
+' more information signal noise &c
+WLAN_BSS_ENTRY structure has another field called uLinkQuality that returns a value from 0 to 100 and indicates the link quality.  
+I understand this to be a rough measurement of the signal-to-noise ratio (SNR)
+
+Received Signal Strength Indicator (RSSI) value. Smaller negative numbers represent a cleaner/stronger signal. As close to zero as you can get.
+
+
+Depending on your OS and application, WiFi signal strength is represented either as quality in percentage, or an RSSI value in dBm, i.e. -70db. 
+RSSI is usually expressed in decibels relative to a milliwat (dBm) from zero to -120dBm and the closer it is to zero, the stronger the signal is. 
+RSSI level less than -80dBm may not be usable, depending on noise.
+
+Noise (dBm) in wireless communications is a combination of all unwanted interfering signal sources, such as crosstalk, radio frequency interference, 
+distortion, etc. This value is measured in decibels from zero to -120. The closer this value is to -120, the better, because that means there is 
+little to no interference. Typical environments range between -100dBm and -80dBm.
+
+While there is no simple precise solution that is used universally, we will try to explain the approximate correlation between signal (RSSI) 
+and quality (percentage).
+
+Generally,
+dBm >= -50 dBm = 100% quality
+dBm <= -100 dBm = 0% quality
+
+For RSSI signal between -50dBm and -100dBm,
+quality ~= 2* (dBm + 100)
+RSSI ~= (percentage / 2) - 100
+
+For example:
+High quality: 90% ~= -55dBm
+Medium quality: 50% ~= -75dBm
+Low quality: 30% ~= -85dBm
+Unusable quality: 8% ~= -96dBm
+
+See also: How to read RSSI/signal and SNR/noise ratings ?
 
 
 

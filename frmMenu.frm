@@ -28,6 +28,12 @@ Begin VB.Form menuForm
       Begin VB.Menu mnublank1 
          Caption         =   "-"
       End
+      Begin VB.Menu mnuScanWireless 
+         Caption         =   "Re-scan Wireless"
+      End
+      Begin VB.Menu blank14 
+         Caption         =   ""
+      End
       Begin VB.Menu mnuCoffee 
          Caption         =   "Donate a coffee with KoFi"
          Index           =   2
@@ -526,6 +532,30 @@ mnuLicence_Click_Error:
 End Sub
 
 
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : mnuScanWireless_Click
+' Author    : beededea
+' Date      : 13/02/2019
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub mnuScanWireless_Click()
+    Dim connectedAPoint As Integer: connectedAPoint = 0
+    
+    On Error GoTo mnuScanWireless_Click_Error
+    
+    Call ScanWireless(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount, connectedAPoint)
+    Call populateWirelessAccessPoints(connectedAPoint)
+    
+    On Error GoTo 0
+    Exit Sub
+
+mnuScanWireless_Click_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuScanWireless_Click of form menuForm"
+End Sub
 
 '---------------------------------------------------------------------------------------
 ' Procedure : mnuSupport_Click
