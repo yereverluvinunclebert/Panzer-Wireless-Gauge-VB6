@@ -75,9 +75,12 @@ The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless streng
 	Persistent debug code http://www.vbforums.com/member.php?234143-Elroy  
 	Open File common dialog code without dependent OCX - http://forums.codeguru.com/member.php?92278-rxbagain  
 	VBAdvance  
+	Wireless APIs:
+ 		Doogle https://www.vbforums.com/showthread.php?633165-VB6-Wireless-Network-API-Exposed&highlight=wireless
+		Coutttsj https://www.vbforums.com/showthread.php?881991-Simplified-WiFi-Scan
+
  
- 
- Tested on :
+  Tested on :
  
 	ReactOS 0.4.14 32bit on virtualBox    
 	Windows 7 Professional 32bit on Intel    
@@ -112,7 +115,9 @@ The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless streng
  
  si_the_geek       for his special folder code
  
- Elroy on VB forums for the balloon tooltips
+ Elroy on VB forums for the balloon tooltips.
+
+ Doogle and Couttsj on the VB forums for their Wireless API code.
  
  Harry Whitfield for his quality testing, brain stimulation and being an 
  unwitting source of inspiration. 
