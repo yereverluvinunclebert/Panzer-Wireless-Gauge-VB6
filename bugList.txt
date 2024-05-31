@@ -6,8 +6,6 @@ DONE
 
 TODO
 
-' remove the middle button
-
 ' credit to couttsj
 
 ' html help and images update
