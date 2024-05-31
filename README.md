@@ -115,7 +115,9 @@ The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless streng
  
  si_the_geek       for his special folder code
  
- Elroy on VB forums for the balloon tooltips
+ Elroy on VB forums for the balloon tooltips.
+
+ Doogle and Couttsj on the VB forums for their Wireless API code.
  
  Harry Whitfield for his quality testing, brain stimulation and being an 
  unwitting source of inspiration. 
