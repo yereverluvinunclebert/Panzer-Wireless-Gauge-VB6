@@ -46,7 +46,8 @@ The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless streng
  is new VB6 widgets with more functionality and then hopefully, conversion of 
  each to RADBasic/TwinBasic for future-proofing and 64bit-ness. 
 
-![menu01](https://github.com/yereverluvinunclebert/Panzer-CPU-Gauge-VB6/assets/2788342/45da67ae-8ec9-4730-a00d-e3c5a1db7519)
+![panzer-wireless0002](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/7beb65e2-6574-43d2-92f8-a0a82f966617)
+
 
  This utility is one of a set of steampunk and dieselpunk widgets. That you can 
  find here on Deviantart: https://www.deviantart.com/yereverluvinuncleber/gallery
