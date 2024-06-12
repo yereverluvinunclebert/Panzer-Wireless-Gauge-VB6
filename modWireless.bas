@@ -302,6 +302,9 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
     If ConIndex > -1 Then 'Display connected network
         Connected = Trim(Left$(thisArray(ConIndex), 25))
         overlayWidget.thisWirelessNo = ConIndex
+        Debug.Print sSSID
+        Debug.Print quality
+        Debug.Print dbm
     End If
     
     On Error GoTo 0

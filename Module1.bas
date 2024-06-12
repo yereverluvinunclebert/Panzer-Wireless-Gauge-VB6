@@ -2790,14 +2790,11 @@ End Function
 ' Date: 13/01/2024
 ' ----------------------------------------------------------------
 Public Sub getgblWirelessArray(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef thisWirelessCount As Integer)
-    
-    Dim I As Integer
-    
+        
     On Error GoTo getGblWirelessArray_Error
     
     Call ScanWireless(thisArray, thisWirelessPercentArray, thisWirelessRSSIArray, thisWirelessCount)
     
-        
     On Error GoTo 0
     Exit Sub
 
