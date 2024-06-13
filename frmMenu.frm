@@ -77,9 +77,6 @@ Begin VB.Form menuForm
       Begin VB.Menu menuReload 
          Caption         =   "Reload Widget (F5)"
       End
-      Begin VB.Menu menuSpawn 
-         Caption         =   "Spawn New Instance of this Widget"
-      End
       Begin VB.Menu blank9 
          Caption         =   ""
       End
