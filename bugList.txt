@@ -2,6 +2,10 @@ DONE
 
 ' implement RSSI - done
 ' credit to couttsj - done
+' test autostart
+
+' html help and images update
+' chm help build
 
 ' -oOo-
 
@@ -10,37 +14,6 @@ TODO
 ' test wifi switch off when running
 ' test no wifi at startup
 
-' when new gauge spawned using menu option
-' check if there is a spawn_n already extant
-' if not write settings.ini with [Software\PzStorageGauge\spawn_n]
-' determine new position set as an offset to current gauge for current DPI only, eg. clockHighDpiXPos=
-' write the position into [Software\PzStorageGauge\spawn_1] for eg.
-' spawn new widget with parameter spawn_1
-
-' if widget opened with spawn_1 parameter
-     read the [Software\PzStorageGauge\spawn_1] clockHighDpiXPos and set position
-     read the [Software\PzStorageGauge\spawn_1] currentDrive and set the drive
-    ' if none present then use the first drive as normal.
-    ' when selecting the drive to monitor, via button, then if opened with spawn parameter then read the [spawn_1] currentDrive and set accordingly.
-    ' when opening prefs indicate spawn_1 in the title
-    ' when opening prefs use spawn_1 state to indicate current drive selected
-    ' when selecting a new drive to monitor, via prefs, then if opened with spawn parameter then read the [spawn_1] currentDrive and set accordingly.
-
-' if widget opened without spawn parameter present
-  ' when starting up, with no spawn param, checks to see if spawn_n sections exist
-  ' if they do exist, then spawn one widget for each
-  ' no other differences required
-  
-' later on some control of spawned widgets could be added to the prefs
-
-' the same code to be added to the OHM widget
-' the same code to be added to the Network widget
-' the same code to be added to the Wireless widget
-
-
-' html help and images update
-' chm help build
-' test autostart
 
 ' add second monitor - wip find cable!
 
