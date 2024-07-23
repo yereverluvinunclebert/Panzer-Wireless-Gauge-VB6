@@ -89,9 +89,6 @@ Private Sub Class_Initialize()
     
     mThisWireless = 0
     
-    ' get the list of Wirelesss and the count
-    'Call getgblWirelessArray(WirelessArray(), WirelessCount)
-    
    On Error GoTo 0
    Exit Sub
 
@@ -738,6 +735,8 @@ Private Sub tmrSampler_Timer()
             ' oldSDeg stored
             oldSDeg = SDeg
             
+            If gblWirelessCount = 0 Then Exit Sub
+            
             ' get the list of Wireless and the count
             Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
                     
@@ -808,13 +807,13 @@ End Sub
 ' ----------------------------------------------------------------
 Private Sub obtainwirelesss()
     On Error GoTo obtainwirelesss_Error
-    
+
         ' get the list of Wirelesss and the count
-        Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
+        If gblWirelessCount > 0 Then Call getgblWirelessArray(gblWirelessSSIDArray(), gblWirelessPercentArray(), gblWirelessRSSIArray(), gblWirelessCount)
         
-        Debug.Print gblWirelessSSIDArray(0)
-    
-        If mThisWirelessNo <> "9999" Then
+        'Debug.Print gblWirelessSSIDArray(0)
+        
+        If mThisWirelessNo <> "9999" And gblWirelessCount > 0 Then
             wirelessPercent = fWireless_Usage_Percent
             wirelessRSSI = fWireless_RSSI
         Else
