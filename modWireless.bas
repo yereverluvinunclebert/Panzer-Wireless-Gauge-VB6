@@ -194,25 +194,26 @@ End Function
 ' ----------------------------------------------------------------
 Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentArray() As Integer, ByRef thisWirelessRSSIArray() As Integer, ByRef lCount As Integer)
 
-    Dim lRet As Long
-    Dim lList As Long
-    Dim lAvailable As Long
-    Dim lStart As Long
-    Dim sLen As Long
+    Dim lRet As Long: lRet = 0
+    Dim lList As Long: lList = 0
+    Dim lAvailable As Long: lAvailable = 0
+    Dim lStart As Long: lStart = 0
+    Dim sLen As Long: sLen = 0
+    Dim lBSS As Long: lBSS = 0
+    Dim sSSID As String: sSSID = vbNullString
+    Dim lPtr As Long: lPtr = 0
+    Dim dwFlags As Long: dwFlags = 0
+    Dim dwreserved As Long: dwreserved = 0
+    Dim quality As Integer: quality = 0
+    Dim dbm As Integer: dbm = 0
+    Dim answer As VbMsgBoxResult: answer = vbNo
+    Dim answerMsg As String: answerMsg = vbNullString
+    Dim XMLBuffer(1023) As Byte
     Dim bSSID() As Byte
-    Dim lBSS As Long
-    Dim sSSID As String
     Dim udtAvailableList As WLAN_AVAILABLE_NETWORK_LIST
     Dim udtNetwork As WLAN_AVAILABLE_NETWORK
     Dim Network As AVAILABLE_NETWORK
-    Dim lPtr As Long
-    Dim dwFlags As Long
-    Dim dwreserved As Long
-    Dim XMLBuffer(1023) As Byte
-            
-    Dim quality As Integer: quality = 0
-    Dim dbm As Integer: dbm = 0
-    
+
     On Error GoTo ScanWireless_Error
     
     ConIndex = -1
@@ -223,16 +224,17 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
     If lHandle Then
         lRet = WlanScan(lHandle, udtList.InterfaceInfo.ifGuid, ByVal 0&, ByVal 0&, ByVal 0&)
         Screen.MousePointer = vbHourglass
-        'Wait for scan to finish
-        Sleep 1000
+        'Wait for scan to finish, don't like this
+        Sleep 500
         Screen.MousePointer = vbDefault
     Else
     
-    'Get adapter handle and find WLAN interfaces
+        'Get adapter handle and find WLAN interfaces
         lRet = WlanOpenHandle(2&, 0&, lVersion, lHandle)
+        
         'NOTE: This code currently only processes the first wireless adapter
         
-        On Error GoTo l_trap_error
+        On Error GoTo l_trap_error2
         
         lRet = WlanEnumInterfaces(ByVal lHandle, 0&, lList)
         
@@ -241,20 +243,6 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
         CopyMemory udtList, ByVal lList, Len(udtList)
         Debug.Print udtList.dwNumberofItems, "WiFi Adapter found!"
     End If
-    
-    GoTo l_bypass_error
-    
-l_trap_error:
-    MsgBox "ERROR - Wireless Adapter unavailable or disabled. Procedure ScanWireless, l_trap_error"
-    lCount = 0
-    Exit Sub
-    
-    
-l_bypass_error:
-
-'    If savedNumberOfItems <> udtList.dwNumberofItems Then
-'        Call populateWirelessAccessPoints(connectedAPoint)
-'    End If
 
     If udtList.dwNumberofItems > 0 Then
         
@@ -268,7 +256,7 @@ l_bypass_error:
 
         lCount = 0
         lStart = lAvailable + 8
-        'lblStatus.Caption = CStr(udtAvailableList.dwNumberofItems) & " Networks Found!"
+
         ReDim bBuffer(Len(Network) * udtAvailableList.dwNumberofItems - 1)
         Do 'Create new abbreviated buffer
             CopyMemory udtNetwork, ByVal lStart, Len(udtNetwork)
@@ -335,7 +323,11 @@ l_bypass_error:
     Exit Sub
     
 l_trap_error2:
-    MsgBox "Error - Wireless Adapter unavailable or disabled. Procedure ScanWireless, l_trap_error2."
+    
+    answer = vbYes
+    answerMsg = "ERROR - Wireless Adapter unavailable or disabled. Handled within subroutine ScanWireless by event l_trap_error2"
+    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Wireless Adapter Error", True, "scanwireless2")
+    
     lCount = 0
     Exit Sub
 
