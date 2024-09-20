@@ -11,6 +11,12 @@ Begin VB.Form frmTimer
    ScaleWidth      =   4680
    StartUpPosition =   3  'Windows Default
    Visible         =   0   'False
+   Begin VB.Timer sleepTimer 
+      Interval        =   3000
+      Left            =   120
+      Tag             =   "stores and compares the last time to see if the PC has slept"
+      Top             =   1575
+   End
    Begin VB.Timer settingsTimer 
       Enabled         =   0   'False
       Interval        =   6000
@@ -29,6 +35,14 @@ Begin VB.Form frmTimer
       Interval        =   5000
       Left            =   90
       Top             =   135
+   End
+   Begin VB.Label Label4 
+      Caption         =   "sleeptimer for testing awake from sleep"
+      Height          =   195
+      Left            =   735
+      TabIndex        =   4
+      Top             =   1650
+      Width           =   3645
    End
    Begin VB.Label Label3 
       Caption         =   "Note: this invisible form is also the container for the large 128x128px project icon"
