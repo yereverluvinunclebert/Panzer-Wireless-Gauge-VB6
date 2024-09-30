@@ -326,7 +326,7 @@ l_trap_error2:
     
     answer = vbYes
     answerMsg = "ERROR - Wireless Adapter unavailable or disabled. Handled within subroutine ScanWireless by event l_trap_error2"
-    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Wireless Adapter Error", True, "scanwireless2")
+    If frmMessage.IsVisible = False Then answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Wireless Adapter Error", True, "scanwireless2")
     
     lCount = 0
     Exit Sub
