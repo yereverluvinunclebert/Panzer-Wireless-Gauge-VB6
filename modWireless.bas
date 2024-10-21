@@ -213,6 +213,9 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
     Dim udtAvailableList As WLAN_AVAILABLE_NETWORK_LIST
     Dim udtNetwork As WLAN_AVAILABLE_NETWORK
     Dim Network As AVAILABLE_NETWORK
+    
+    Dim strDBG As String: strDBG = vbNullString
+
 
     On Error GoTo ScanWireless_Error
     
@@ -222,6 +225,8 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
     
     ' requests a scan for available networks on the indicated interface.
     If lHandle Then
+        strDBG = "lhandlescan"
+    
         lRet = WlanScan(lHandle, udtList.InterfaceInfo.ifGuid, ByVal 0&, ByVal 0&, ByVal 0&)
         Screen.MousePointer = vbHourglass
         'Wait for scan to finish, don't like this
@@ -229,6 +234,8 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
         Screen.MousePointer = vbDefault
     Else
     
+        strDBG = "scan"
+        
         'Get adapter handle and find WLAN interfaces
         lRet = WlanOpenHandle(2&, 0&, lVersion, lHandle)
         
@@ -243,8 +250,12 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
         CopyMemory udtList, ByVal lList, Len(udtList)
         Debug.Print udtList.dwNumberofItems, "WiFi Adapter found!"
     End If
+    
+    strDBG = "udtList"
 
     If udtList.dwNumberofItems > 0 Then
+    
+        strDBG = "udtList+"
         
         lRet = WlanGetAvailableNetworkList(lHandle, udtList.InterfaceInfo.ifGuid, 2&, 0&, lAvailable)
         
@@ -256,62 +267,97 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
 
         lCount = 0
         lStart = lAvailable + 8
-
-        ReDim bBuffer(Len(Network) * udtAvailableList.dwNumberofItems - 1)
-        Do 'Create new abbreviated buffer
-            CopyMemory udtNetwork, ByVal lStart, Len(udtNetwork)
-            lCount = lCount + 1
-            lStart = lStart + Len(udtNetwork)
-            CopyMemory bBuffer(lPtr), udtNetwork.dot11Ssid.uSSIDLength, Len(Network)
-            lPtr = lPtr + Len(Network)
-        Loop Until lCount = udtAvailableList.dwNumberofItems
-        WlanFreeMemory lAvailable
-        WlanFreeMemory lList
-        'Create new list from new buffer
-        lStart = VarPtr(bBuffer(0))
-        lCount = 0
         
-        ReDim thisArray(udtAvailableList.dwNumberofItems) As String
-        ReDim thisWirelessPercentArray(udtAvailableList.dwNumberofItems) As Integer
-        ReDim thisWirelessRSSIArray(udtAvailableList.dwNumberofItems) As Integer
+        strDBG = "bBuffer"
         
-        Do
-            CopyMemory Network, ByVal lStart, Len(Network)
-            sLen = Network.dot11Ssid.uSSIDLength
-            If sLen = 0 Then
-                sSSID = "(Unknown)"
-            Else
-                ReDim bSSID(sLen - 1)
-                CopyMemory bSSID(0), Network.dot11Ssid.ucSSID(0), sLen
-                sSSID = ByteToStr(bSSID)
-            End If
-            Debug.Print "SSID "; sSSID, "Signal "; Network.wlanSignalQuality
-            sSSID = Left$(sSSID & Space$(25), 25)
+        If udtAvailableList.dwNumberofItems > 0 Then
 
-            thisArray(lCount) = sSSID
-            quality = Network.wlanSignalQuality
-            thisWirelessPercentArray(lCount) = quality
+            ReDim bBuffer(Len(Network) * udtAvailableList.dwNumberofItems - 1)
+            Do 'Create new abbreviated buffer
             
-            If (quality <= 0) Then
-                dbm = -100
-            ElseIf quality >= 100 Then
-                dbm = -50
-            Else
-                dbm = (quality / 2) - 100
-            End If
+                strDBG = "CopyMemory"
+    
+                CopyMemory udtNetwork, ByVal lStart, Len(udtNetwork)
+                lCount = lCount + 1
+                lStart = lStart + Len(udtNetwork)
+                CopyMemory bBuffer(lPtr), udtNetwork.dot11Ssid.uSSIDLength, Len(Network)
+                lPtr = lPtr + Len(Network)
+            Loop Until lCount = udtAvailableList.dwNumberofItems
             
-            thisWirelessRSSIArray(lCount) = dbm
+            strDBG = "WlanFreeMemory"
+    
+            WlanFreeMemory lAvailable
+            WlanFreeMemory lList
+            'Create new list from new buffer
+            lStart = VarPtr(bBuffer(0))
+            lCount = 0
             
-            If (Network.dwFlags And 1) = 1 Then
-                ConIndex = lCount
-            End If
-            lCount = lCount + 1
-            lStart = lStart + Len(Network)
-        Loop Until lCount = udtAvailableList.dwNumberofItems
-    Else
-        MsgBox "No Wireless Adapters Found"
+            strDBG = "ReDim3"
+            
+            ReDim thisArray(udtAvailableList.dwNumberofItems) As String
+            ReDim thisWirelessPercentArray(udtAvailableList.dwNumberofItems) As Integer
+            ReDim thisWirelessRSSIArray(udtAvailableList.dwNumberofItems) As Integer
+            
+            Do
+            
+                strDBG = "Do"
+            
+                CopyMemory Network, ByVal lStart, Len(Network)
+                sLen = Network.dot11Ssid.uSSIDLength
+                If sLen = 0 Then
+                
+                    strDBG = "0"
+                
+                    sSSID = "(Unknown)"
+                Else
+                    strDBG = "else"
+                    
+                    ReDim bSSID(sLen - 1)
+                    CopyMemory bSSID(0), Network.dot11Ssid.ucSSID(0), sLen
+                    sSSID = ByteToStr(bSSID)
+                End If
+                Debug.Print "SSID "; sSSID, "Signal "; Network.wlanSignalQuality
+                
+                strDBG = "sSSID"
+    
+                sSSID = Left$(sSSID & Space$(25), 25)
+    
+                thisArray(lCount) = sSSID
+                quality = Network.wlanSignalQuality
+                thisWirelessPercentArray(lCount) = quality
+                
+                strDBG = "quality"
+                
+                If (quality <= 0) Then
+                    dbm = -100
+                ElseIf quality >= 100 Then
+                    dbm = -50
+                Else
+                    dbm = (quality / 2) - 100
+                End If
+                
+                strDBG = "thisWirelessRSSIArray"
+                
+                thisWirelessRSSIArray(lCount) = dbm
+                
+                If (Network.dwFlags And 1) = 1 Then
+                    ConIndex = lCount
+                End If
+                
+                strDBG = "lCount"
+    
+                lCount = lCount + 1
+                lStart = lStart + Len(Network)
+            Loop Until lCount = udtAvailableList.dwNumberofItems
+        Else
+            MsgBox "No Wireless Adapters Found"
+        End If
     End If
+    
     If ConIndex > -1 Then 'Display connected network
+    
+        strDBG = "Connected"
+
         Connected = Trim(Left$(thisArray(ConIndex), 25))
         overlayWidget.thisWirelessNo = ConIndex
         Debug.Print sSSID
@@ -333,7 +379,11 @@ l_trap_error2:
 
 ScanWireless_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ScanWireless, line " & Erl & "."
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ScanWireless, line " & Erl & "." & " error point = " & strDBG
+    
+    If strDBG = "bBuffer" Then
+        MsgBox "Len(Network) " & Len(Network) & " udtAvailableList.dwNumberofItems " & udtAvailableList.dwNumberofItems - 1
+    End If
 
 End Sub
 
