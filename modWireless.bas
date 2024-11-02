@@ -349,8 +349,8 @@ Public Sub ScanWireless(ByRef thisArray() As String, ByRef thisWirelessPercentAr
                 lCount = lCount + 1
                 lStart = lStart + Len(Network)
             Loop Until lCount = udtAvailableList.dwNumberofItems
-        Else
-            MsgBox "No Wireless Adapters Found"
+'        Else
+'            MsgBox "No Wireless Adapters Found"
         End If
     End If
     
