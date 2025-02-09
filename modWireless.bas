@@ -1,25 +1,25 @@
 Attribute VB_Name = "modWireless"
 Option Explicit
 
-Private Enum DOT11_PHY_TYPE
-    dot11_phy_type_unknown = 0
-    dot11_phy_type_any = 0
-    dot11_phy_type_fhss = 1
-    dot11_phy_type_dsss = 2
-    dot11_phy_type_irbaseband = 3
-    dot11_phy_type_ofdm = 4
-    dot11_phy_type_hrdsss = 5
-    dot11_phy_type_erp = 6
-    dot11_phy_type_ht = 7
-    dot11_phy_type_IHV_start = &H80000000
-    dot11_phy_type_IHV_end = &HFFFFFFFF
-End Enum
+'Private Enum DOT11_PHY_TYPE
+'    dot11_phy_type_unknown = 0
+'    dot11_phy_type_any = 0
+'    dot11_phy_type_fhss = 1
+'    dot11_phy_type_dsss = 2
+'    dot11_phy_type_irbaseband = 3
+'    dot11_phy_type_ofdm = 4
+'    dot11_phy_type_hrdsss = 5
+'    dot11_phy_type_erp = 6
+'    dot11_phy_type_ht = 7
+'    dot11_phy_type_IHV_start = &H80000000
+'    dot11_phy_type_IHV_end = &HFFFFFFFF
+'End Enum
 
-Private Enum DOT11_BSS_TYPE
-    dot11_BSS_type_infrastructure = 1
-    dot11_BSS_type_independent = 2
-    DOT11_BSS_TYPE_ANY = 3
-End Enum
+'Private Enum DOT11_BSS_TYPE
+'    dot11_BSS_type_infrastructure = 1
+'    dot11_BSS_type_independent = 2
+'    DOT11_BSS_TYPE_ANY = 3
+'End Enum
 
 Private Type GUID
     data1 As Long
@@ -40,15 +40,15 @@ Private Type DOT11_SSID
     ucSSID(31) As Byte
 End Type
 
-Private Type WLAN_RATE_SET
-    uRateSetLength As Long
-    usRateSet(125) As Integer
-End Type
-
-Private Type FILETIME
-    dwLowDateTime As Long
-    dwHighDateTime As Long
-End Type
+'Private Type WLAN_RATE_SET
+'    uRateSetLength As Long
+'    usRateSet(125) As Integer
+'End Type
+'
+'Private Type FILETIME
+'    dwLowDateTime As Long
+'    dwHighDateTime As Long
+'End Type
 
 Private Type WLAN_AVAILABLE_NETWORK
     strProfileName(511) As Byte
@@ -86,24 +86,24 @@ Private Type AVAILABLE_NETWORK
 End Type
 
 
-Private Type WLAN_BSS_ENTRY
-    dot11Ssid As DOT11_SSID
-    uPhyId As Long
-    dot11Bssid(7) As Byte
-    dot11BssType As DOT11_BSS_TYPE
-    dot11BssPhyType As DOT11_PHY_TYPE
-    lRssi As Long
-    uLinkQuality As Long
-    bInRegDomain As Long 'Boolean
-    usBeaconPeriod As Long
-    ullTimestamp As FILETIME
-    ullHostTimestamp As FILETIME
-    usCapabilityInformation As Long
-    ulChCenterFrequency As Long
-    wlanRateSet As WLAN_RATE_SET
-    ulIeOffset As Long
-    ulIeSize As Long
-End Type
+'Private Type WLAN_BSS_ENTRY
+'    dot11Ssid As DOT11_SSID
+'    uPhyId As Long
+'    dot11Bssid(7) As Byte
+'    dot11BssType As DOT11_BSS_TYPE
+'    dot11BssPhyType As DOT11_PHY_TYPE
+'    lRssi As Long
+'    uLinkQuality As Long
+'    bInRegDomain As Long 'Boolean
+'    usBeaconPeriod As Long
+'    ullTimestamp As FILETIME
+'    ullHostTimestamp As FILETIME
+'    usCapabilityInformation As Long
+'    ulChCenterFrequency As Long
+'    wlanRateSet As WLAN_RATE_SET
+'    ulIeOffset As Long
+'    ulIeSize As Long
+'End Type
 
 Private Type WLAN_INTERFACE_INFO_LIST
     dwNumberofItems As Long
@@ -131,8 +131,7 @@ Private Declare Function WlanGetNetworkBssList Lib "wlanapi.dll" (ByVal hClientH
 Private Declare Function WlanGetProfile Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As GUID, ByVal strProfileName As Long, ByVal pReserved As Long, pstrProfileXml As Long, pdwFlags As Long, pdwGrantedAccess As Long) As Long
 Private Declare Sub CopyMemory Lib "kernel32.dll" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
 Private Declare Sub WlanFreeMemory Lib "wlanapi.dll" (ByVal pMemory As Long)
-Private Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
-Private Declare Function lstrlenW& Lib "kernel32.dll" (ByVal lpszSrc&)
+'Private Declare Function lstrlenW& Lib "kernel32.dll" (ByVal lpszSrc&)
 
 Private udtList As WLAN_INTERFACE_INFO_LIST
 Private udtBSSList As WLAN_BSS_LIST
@@ -141,6 +140,9 @@ Private lHandle As Long
 Private lVersion As Long
 Private Connected As String
 Private bBuffer() As Byte
+
+Private Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
+
 
 
 
