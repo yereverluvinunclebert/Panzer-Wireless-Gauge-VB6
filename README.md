@@ -105,6 +105,8 @@ The following are the declarations required for the various APIs used in this to
     Private Connected As String
     Private bBuffer() As Byte
 
+ Dig into the code, it is entirely FOSS, so help yourself!
+
  ![vb6PanzerWirelessPhoto1440x](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/7e182a87-baf5-4244-bcb9-769487bdfb62)
 
  This widget can be increased in size, animation speed can be changed, 
