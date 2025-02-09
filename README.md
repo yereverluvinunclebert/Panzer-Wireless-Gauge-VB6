@@ -14,6 +14,97 @@
   
 The Panzer Wireless Gauge VB6 is a useful utility displaying the wireless strength of all wi-fi network devices available to your system but it does so in a dieselpunk fashion on your desktop. This Widget is a moveable widget that you can move anywhere around the desktop as you require. 
 
+The following are the declarations required for the various APIs used in this tool. This will goive you an indications as to how it obtains wifi information. You will have to dig into the code a little deeper to see the routine that obtains the data, it is too long to include here in full.
+
+    Private Type GUID
+        data1 As Long
+        data2 As Integer
+        data3 As Integer
+        data4(7) As Byte
+    End Type
+    
+    Private Type WLAN_INTERFACE_INFO
+        ifGuid As GUID
+        InterfaceDescription(511) As Byte
+        IsState As Long
+    End Type
+    
+    Private Type DOT11_SSID
+        uSSIDLength As Long
+        ucSSID(31) As Byte
+    End Type
+    
+    Private Type WLAN_AVAILABLE_NETWORK
+        strProfileName(511) As Byte
+        dot11Ssid As DOT11_SSID
+        dot11BssType As Long
+        uNumberOfBssids As Long
+        bNetworkConnectable As Long
+        wlanNotConnectableReason As Long
+        uNumberOfPhyTypes As Long
+        dot11PhyTypes(7) As Long
+        bMorePhyTypes As Long
+        wlanSignalQuality As Long
+        bSecurityEnabled As Long
+        dot11DefaultAuthAlgorithm As Long
+        dot11DefaultCipherAlgorithm As Long
+        dwFlags As Long
+        dwreserved As Long
+    End Type
+    
+    Private Type AVAILABLE_NETWORK
+        dot11Ssid As DOT11_SSID
+        dot11BssType As Long
+        uNumberOfBssids As Long
+        bNetworkConnectable As Long
+        wlanNotConnectableReason As Long
+        uNumberOfPhyTypes As Long
+        dot11PhyTypes(7) As Long
+        bMorePhyTypes As Long
+        wlanSignalQuality As Long
+        bSecurityEnabled As Long
+        dot11DefaultAuthAlgorithm As Long
+        dot11DefaultCipherAlgorithm As Long
+        dwFlags As Long
+        dwreserved As Long
+    End Type
+    
+    Private Type WLAN_INTERFACE_INFO_LIST
+        dwNumberofItems As Long
+        dwIndex As Long
+        InterfaceInfo As WLAN_INTERFACE_INFO
+    End Type
+    
+    Private Type WLAN_AVAILABLE_NETWORK_LIST
+        dwNumberofItems As Long
+        dwIndex As Long
+        Network As WLAN_AVAILABLE_NETWORK
+    End Type
+    
+    Private Type WLAN_BSS_LIST
+        dwTotalSize As Long
+        dwNumberofItems As Long
+        wlanBssEntries As Long
+    End Type
+    
+    Private Declare Function WlanOpenHandle Lib "wlanapi.dll" (ByVal dwClientVersion As Long, ByVal pdwReserved As Long, ByRef pdwNegotiaitedVersion As Long, ByRef phClientHandle As Long) As Long
+    Private Declare Function WlanEnumInterfaces Lib "wlanapi.dll" (ByVal hClientHandle As Long, ByVal pReserved As Long, ppInterfaceList As Long) As Long
+    Private Declare Function WlanGetAvailableNetworkList Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As GUID, ByVal dwFlags As Long, ByVal pReserved As Long, ppAvailableNetworkList As Long) As Long
+    Private Declare Function WlanScan Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As GUID, pDot11Ssid As Long, pIeData As Long, reserved As Long) As Long
+    Private Declare Function WlanGetNetworkBssList Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGui As GUID, ByVal pDot11Ssid As Long, ByVal dot11BssType As Long, ByVal bSecurityEnabled As Long, ByVal pReserved As Long, ppWlanBssList As Long) As Long
+    Private Declare Function WlanGetProfile Lib "wlanapi.dll" (ByVal hClientHandle As Long, pInterfaceGuid As GUID, ByVal strProfileName As Long, ByVal pReserved As Long, pstrProfileXml As Long, pdwFlags As Long, pdwGrantedAccess As Long) As Long
+    Private Declare Sub CopyMemory Lib "kernel32.dll" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
+    Private Declare Sub WlanFreeMemory Lib "wlanapi.dll" (ByVal pMemory As Long)
+    'Private Declare Function lstrlenW& Lib "kernel32.dll" (ByVal lpszSrc&)
+    
+    Private udtList As WLAN_INTERFACE_INFO_LIST
+    Private udtBSSList As WLAN_BSS_LIST
+    Private ConIndex As Integer
+    Private lHandle As Long
+    Private lVersion As Long
+    Private Connected As String
+    Private bBuffer() As Byte
+
  ![vb6PanzerWirelessPhoto1440x](https://github.com/yereverluvinunclebert/Panzer-Wireless-Gauge-VB6/assets/2788342/7e182a87-baf5-4244-bcb9-769487bdfb62)
 
  This widget can be increased in size, animation speed can be changed, 
