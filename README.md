@@ -2,7 +2,7 @@
  
   A FOSS Wireless Gauge VB6 WoW64 Widget for Windows Vista, 7, 8 and 10/11+. There will also be a version for Reactos and XP, watch this space for the link. Also tested and running well on Linux and Mac os/X using Wine.
  
- A current VB6/RC6 PSD program being worked upon now, added the Received Signal Strength Indicator (RSSI) value, so about 97% complete, awaiting: handling of dynamic WLAN access point changes, testing on Windows XP and Win7 32bit and some multi-monitor checking, completion of the CHM help file and the creation of the setup.exe. This Panzer widget is based upon the Yahoo/Konfabulator widget of the same visual design and very similar operation.
+ A current VB6/RC6 PSD program being worked upon now, added the Received Signal Strength Indicator (RSSI) value, so about 98% complete with some recent changes, awaiting: handling of dynamic WLAN access point changes, testing on Windows XP and Win7 32bit and some multi-monitor checking, completion of the CHM help file and the creation of the setup.exe. This Panzer widget is based upon the Yahoo/Konfabulator widget of the same visual design and very similar operation.
 
  Why VB6? Well, with a 64 bit, modern-language improvement upgrade on the way with 100% compatible TwinBasic coupled with support for transparent PNGs via RC/Cairo, VB6 code has an amazing future.
 
