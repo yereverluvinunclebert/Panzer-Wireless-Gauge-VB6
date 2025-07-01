@@ -17,7 +17,7 @@ Attribute VB_Exposed = False
 ' Author    : beededea
 ' Date      : 31/07/2023
 ' Purpose   : create a fully click-through Widget, which allows for all kind of
-'             things to render on top of the PSD-generated Widgets created in cfAlpha
+'             things to render on top of the PSD-generated Widgets created in cfGauge
 '---------------------------------------------------------------------------------------
 
 Option Explicit
@@ -27,8 +27,7 @@ Private wirelessRSSI As Long
 
 Private Declare Function SafeArrayGetDim Lib "oleaut32.dll" (ByRef saArray() As Any) As Long
 
-
-'these Public Properties are set in the Parent (here, cfAlpha)
+'these Public Properties are set in the Parent (here, cfGauge)
 Public cCollOverlayImages As cCollection
 Public cxPerc As Single
 Public cyPerc As Single
@@ -56,23 +55,48 @@ Private mLocked As Boolean              ' property Locked
 Private mHidden As Boolean              ' property Hidden
 Private mThisWireless As String            ' property thisWireless
 Private mThisWirelessNo As Integer          ' property thisWireless
+
 Private mThisOpacity As String          ' property ThisOpacity
 Private mSamplingInterval As String     ' property SamplingInterval
-Private mThisFace As Integer             ' property mThisFace
 
 
 
 
 '---------------------------------------------------------------------------------------
-' Procedure : Class_Initialize
+' Procedure : initialisePrivateVars
+' Author    : beededea
+' Date      : 12/02/2025
+' Purpose   : initialise vars
+'---------------------------------------------------------------------------------------
+'
+Private Sub initialisePrivateVars()
+
+   On Error GoTo initialisePrivateVars_Error
+
+
+   ' pvtCurrentDateToDisplay = vbNullString
+
+   On Error GoTo 0
+   Exit Sub
+
+initialisePrivateVars_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initialisePrivateVars of Class Module cwOverlay"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : Class_Initialize for cwOverlay
 ' Author    : olaf schmidt
 ' Date      : 31/07/2023
-' Purpose   :
+' Purpose   : Constructor (Initialise) set the inital values of private vars, set up the timers
 '---------------------------------------------------------------------------------------
 '
 Private Sub Class_Initialize()
+    Dim intervalValue As Integer: intervalValue = 0
     
     On Error GoTo Class_Initialize_Error
+    
+    Call initialisePrivateVars
 
     Set W = Cairo.WidgetBase
         W.BackColor = -1  'we don't use any BackColor here, transparent
@@ -87,8 +111,6 @@ Private Sub Class_Initialize()
     Set tmrAnimator = Nothing
     Set tmrAnimator = New_c.Timer(animationInterval, False)
     
-    mThisWireless = 0
-    
    On Error GoTo 0
    Exit Sub
 
@@ -96,6 +118,7 @@ Class_Initialize_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Class_Initialize of Class Module cwOverlay"
 End Sub
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Widget
@@ -164,11 +187,18 @@ End Property
 '---------------------------------------------------------------------------------------
 '
 Public Property Let Ticking(ByVal newValue As Boolean)
+    'Dim intervalValue As Integer: intervalValue = 0
     On Error GoTo TickingLet_Error
 
     If mTicking <> newValue Then mTicking = newValue Else Exit Property
     
     If mTicking Then
+'        If mPointerAnimate Then
+'            'intervalValue = 100
+'        Else
+'            'intervalValue = 500
+'        End If
+
         tmrSampler.Enabled = True
     Else
         tmrSampler.Enabled = False
@@ -180,7 +210,7 @@ Public Property Let Ticking(ByVal newValue As Boolean)
 TickingLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Ticking of Class Module cwOverlay"
-End Property ' the earth Ticking flag
+End Property
 
 '---------------------------------------------------------------------------------------
 ' Property : PointerAnimate
@@ -220,7 +250,7 @@ Public Property Let PointerAnimate(ByVal newValue As Boolean)
 PointerAnimateLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property PointerAnimate of Class Module cwOverlay"
-End Property
+End Property ' the earth PointerAnimate flag
 '---------------------------------------------------------------------------------------
 ' Property : thisOpacity
 ' Author    : beededea
@@ -258,48 +288,6 @@ Public Property Let thisOpacity(ByVal newValue As String)
 thisOpacityLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property thisOpacity of Class Module cwOverlay"
-End Property
-
-
-'---------------------------------------------------------------------------------------
-' Property : thisWireless
-' Author    : beededea
-' Date      : 17/05/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
-'
-Public Property Get thisFace() As Integer
-   On Error GoTo thisFaceGet_Error
-
-    thisFace = mThisFace
-
-   On Error GoTo 0
-   Exit Property
-
-thisFaceGet_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property thisFace of Class Module cwOverlay"
-End Property
-'---------------------------------------------------------------------------------------
-' Property  : thisFace
-' Author    :
-' Date      : 09/05/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
-'
-Public Property Let thisFace(ByVal newValue As Integer)
-    On Error GoTo thisFaceLet_Error
-
-    If mThisFace <> newValue Then mThisFace = newValue Else Exit Property
-    
-    Call obtainwirelesss
-    
-    On Error GoTo 0
-    Exit Property
-
-thisFaceLet_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property thisFace of Class Module cwOverlay"
 End Property
 
 
@@ -393,6 +381,7 @@ thisWirelessNoLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property thisWirelessNo of Class Module cwOverlay"
 End Property
+
 '---------------------------------------------------------------------------------------
 ' Property : samplingInterval
 ' Author    : beededea
@@ -423,7 +412,7 @@ Public Property Let samplingInterval(ByVal newValue As String)
     On Error GoTo samplingIntervalLet_Error
 
     If mSamplingInterval <> newValue Then mSamplingInterval = newValue Else Exit Property
-
+        
     If tmrSampler.Interval = 100 Then Call tmrSampler_Timer ' allows first early run
     
     tmrSampler.Interval = Val(mSamplingInterval) * 1000
@@ -440,11 +429,12 @@ samplingIntervalLet_Error:
 End Property
 
 
+
 '---------------------------------------------------------------------------------------
-' Property : Locked
+' Property  : Locked
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property used to store/set the lock state to lock the widget in place, the actual locking is done elsewhere
 '---------------------------------------------------------------------------------------
 '
 Public Property Get Locked() As Boolean
@@ -457,13 +447,13 @@ Public Property Get Locked() As Boolean
 
 LockedGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwoverlay"
 End Property
 '---------------------------------------------------------------------------------------
 ' Property  : Locked
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property used to store/set the lock state to lock the widget in place, the actual locking is done elsewhere
 '---------------------------------------------------------------------------------------
 '
 Public Property Let Locked(ByVal newValue As Boolean)
@@ -476,14 +466,59 @@ Public Property Let Locked(ByVal newValue As Boolean)
 
 LockedLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwoverlay"
 End Property
+
+
+
+
+''---------------------------------------------------------------------------------------
+'' Procedure : MyOpacity
+'' Author    : beededea
+'' Date      : 17/05/2023
+'' Purpose   : property (by value) used to determine the opacity of elements in the overlay
+''---------------------------------------------------------------------------------------
+''
+'Public Property Let MyOpacity(ByVal newValue As Double)
+'   On Error GoTo MyOpacityLet_Error
+'
+'   If mMyOpacity <> newValue Then mMyOpacity = newValue Else Exit Property
+'
+'   On Error GoTo 0
+'   Exit Property
+'
+'MyOpacityLet_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure MyOpacity of Class Module cwAbout"
+'End Property
+'
+''---------------------------------------------------------------------------------------
+'' Procedure : MyOpacity
+'' Author    : beededea
+'' Date      : 17/05/2023
+'' Purpose   : property (by value) used to determine the opacity of elements in the overlay
+''---------------------------------------------------------------------------------------
+''
+'Public Property Get MyOpacity() As Double
+'   On Error GoTo MyOpacityGet_Error
+'
+'   MyOpacity = mMyOpacity
+'
+'   On Error GoTo 0
+'   Exit Property
+'
+'MyOpacityGet_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure MyOpacity of Class Module cwAbout"
+'End Property
+
+
 
 '---------------------------------------------------------------------------------------
 ' Property  : Hidden
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value)  the set the hidden value of the whole widget
 '---------------------------------------------------------------------------------------
 '
 Public Property Get Hidden() As Boolean
@@ -496,13 +531,17 @@ Public Property Get Hidden() As Boolean
 
 HiddenGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwoverlay"
 End Property
+
+    
+
+
 '---------------------------------------------------------------------------------------
 ' Property  : Hidden
 ' Author    : beededea
 ' Date      : 10/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value)  the set the hidden value of the whole widget
 '---------------------------------------------------------------------------------------
 '
 Public Property Let Hidden(ByVal newValue As Boolean)
@@ -524,8 +563,10 @@ Public Property Let Hidden(ByVal newValue As Boolean)
 
 HiddenLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwoverlay"
 End Property
+
+
 '
 '---------------------------------------------------------------------------------------------
 ' Procedure : W_HitTest
@@ -577,7 +618,6 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     On Error GoTo W_Paint_Error
     
     'set some Font- and ForeColor-Properties and draw some Text on the Widget
-    
     W.FontName = "arial"
     W.ForeColor = cream
     W.FontSize = 18
@@ -589,7 +629,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     txtWirelessPercent = CStr(Int(wirelessPercent))
     txtWirelessRSSI = wirelessRSSI
 
-    For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
+    For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfGauge by duplicating collPSDNonUIElements.
       Arr = cCollOverlayImages.ItemByIndex(I)
       Key = cCollOverlayImages.KeyByIndex(I)
       
@@ -600,20 +640,6 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                          
             ' for specific keys perform rotation actions, clock hands &c
              Select Case Key
-                 
-                 Case "fahrenheit"
-                    
-                    If mThisFace = 1 Then
-                        Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'shift the Pattern via the original X,Y PSD-Offsets (stored in Arr(0) and Arr(1))
-                        CC.Paint Arr(2), Pat 'render the Pattern
-                    End If
-                    
-                 Case "clockface"
-                    
-                    If mThisFace = 0 Then
-                        Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1))
-                        CC.Paint Arr(2), Pat ' render the Pattern
-                    End If
                  
                  Case "redlamptrue"
                     
@@ -716,6 +742,10 @@ tmrAnimator_Timer_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrAnimator_Timer of Class Module cwOverlay"
 End Sub
 
+  
+
+    
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : tmrSampler_Timer
@@ -725,11 +755,12 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub tmrSampler_Timer()
+    
     Dim degDiff As Double: degDiff = 0
     
     On Error GoTo tmrSampler_Timer_Error
-
-    If mPointerAnimate = True Then
+    
+   If mPointerAnimate = True Then
         If tmrAnimator.Enabled = False Then
         
             ' oldSDeg stored
@@ -786,6 +817,8 @@ Private Sub tmrSampler_Timer()
     
     W.Parent.Refresh
 
+    tmrSampler.Enabled = True
+            
    On Error GoTo 0
    Exit Sub
 
@@ -793,6 +826,8 @@ tmrSampler_Timer_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrSampler_Timer of Class Module cwOverlay"
 End Sub
+
+
 
 
 

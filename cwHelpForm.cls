@@ -303,13 +303,13 @@ End Sub
 '
 Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Single, ByVal mMyOpacity As Double)
     On Error GoTo Draw_Error
-
+    
     CC.ScaleDrawings mZoom, mZoom
 
     ' Widgets are refreshed "from the ground up" in RC5 and not so in RC6
     ' extra code NOT needed when using RC5 but now required in RC6 - starts
     CC.Operator = CAIRO_OPERATOR_CLEAR
-     CC.Paint 'clear the whole background of this Widgets underlying Surface via Clear-Operator
+    CC.Paint 'clear the whole background of this Widgets underlying Surface via Clear-Operator
     CC.Operator = CAIRO_OPERATOR_OVER 'switch back to the default-Operator
     ' extra code not needed when using RC5 but now required in RC6 - ends
     
