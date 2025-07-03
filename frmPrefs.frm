@@ -4007,7 +4007,7 @@ Private Sub btnSave_Click()
     If gblStartup = "1" Then
         Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "PanzerWirelessGauge", """" & App.Path & "\" & "Panzer-Wireless-Gauge-VB6.exe""")
     Else
-        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "PanzerWireless Gauge", vbNullString)
+        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "PanzerWirelessGauge", vbNullString)
     End If
 
     ' save the values from the general tab
