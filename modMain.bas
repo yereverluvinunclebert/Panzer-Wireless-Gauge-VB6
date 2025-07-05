@@ -1224,9 +1224,6 @@ Private Sub loadExcludePathCollection()
         .Add Empty, "fahrenheit"
         .Add Empty, "clockface"
         .Add Empty, "faceweathering"
-        
-        .Add Empty, "bigreflection"     'all reflections
-        .Add Empty, "windowreflection"
 
         .Add Empty, "redlamptrue"
         .Add Empty, "redlampfalse"
@@ -1236,6 +1233,9 @@ Private Sub loadExcludePathCollection()
         
         .Add Empty, "secondshadow" 'clock-hand-seconds-shadow
         .Add Empty, "secondhand"   'clock-hand-seconds
+                
+        .Add Empty, "bigreflection"     'all reflections
+        .Add Empty, "windowreflection"
     End With
         
 

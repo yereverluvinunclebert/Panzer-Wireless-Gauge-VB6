@@ -240,8 +240,8 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
                 If gblGaugeTooltips = "0" Then CreateToolTip gaugeForm.hWnd, "Click here to toggle the pointer movement from once per interval to a more fluid, continuous movement.", _
                      TTIconInfo, gblWidgetName & " Tick Button Help", , , , True
             Case "housing/switchfacesbutton"
-                If gblGaugeTooltips = "0" Then CreateToolTip gaugeForm.hWnd, "This button selects the next sensor from the list of sensors on your system.", _
-                     TTIconInfo, gblWidgetName & " Switch Faces Button Help", , , , True
+                If gblGaugeTooltips = "0" Then CreateToolTip gaugeForm.hWnd, "This button has no function in this widget.", _
+                     TTIconInfo, gblWidgetName & " Select Wireless Button Help", , , , True
             Case "housing/stopbutton"
                 Call stopbutton_mouseMove(Sender)
             Case "housing/startbutton"
