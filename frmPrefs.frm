@@ -2480,6 +2480,9 @@ Private Sub Form_Load()
        
     ' read the last saved position from the settings.ini
     Call readPrefsPosition
+    
+    ' size and position the frames and buttons
+    Call positionPrefsFramesButtons
         
     ' determine the frame heights in dynamic sizing or normal mode
     Call setframeHeights
@@ -2498,9 +2501,6 @@ Private Sub Form_Load()
     
     ' adjust the theme used by the prefs alone
     Call adjustPrefsTheme
-    
-    ' size and position the frames and buttons
-    Call positionPrefsFramesButtons
     
     ' make the last used tab appear on startup
     Call showLastTab
